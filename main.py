@@ -194,7 +194,7 @@ torch.save(model, path + "model_saved")
 ## Load the model
 model = torch.load(path + "model_saved", map_location = 'cpu')
 
-## Prediction (TO DO: support prediction on GPU)
+## Prediction (TO DO: support prediction on GPU, test on images with differrent names)
 detection_threshold = 0.5
 
 trans = transforms.Compose([transforms.ToTensor()])
