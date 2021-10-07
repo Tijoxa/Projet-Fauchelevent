@@ -165,7 +165,7 @@ lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 1, gamma =
 num_epochs = 20
 epoch = 0
 
-if (epoch < num_epochs) or (loss > 0.2):
+while (epoch < num_epochs) or (loss > 0.2):
     loss_hist.reset()
 
     for i in range(len(train_data_loader.dataset)):
