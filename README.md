@@ -14,12 +14,12 @@ librairies à installer :
 /root :
 main.py
 output.png
-fasterrcnn_resnet50_fpn_best.pth
+fasterrcnn_resnet50_fpn_best.pth   ( https://www.kaggle.com/mathurinache/fasterrcnn )
 model_saved
-train.csv
-sample_submission.csv
+train.csv   ( https://www.kaggle.com/c/global-wheat-detection/data )
+sample_submission.csv   ( https://www.kaggle.com/c/global-wheat-detection/data )
 /testflv
-/train
+/train   ( https://www.kaggle.com/c/global-wheat-detection/data )
 
 /root/testflv :
 10 images 1024*1024
