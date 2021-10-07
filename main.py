@@ -162,11 +162,10 @@ params = [p for p in model.parameters() if p.requires_grad]
 optimizer = torch.optim.SGD(params, lr = 0.03, momentum = 0.9, weight_decay = 0.00001)
 lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 1, gamma = 0.5)
 
-num_epochs = 4
+num_epochs = 20
+epoch = 0
 
-loss_hist = Averager()
-
-for epoch in range(num_epochs):
+if (epoch < nump_epochs) or (loss > 0.2):
     loss_hist.reset()
 
     for i in range(len(train_data_loader.dataset)):
@@ -186,6 +185,8 @@ for epoch in range(num_epochs):
         lr_scheduler.step()
 
     print(f"Epoch #{epoch + 1} loss: {loss_hist.value}")
+    
+    epoch += 1
 
 torch.save(model, path + "model_saved")
 """
