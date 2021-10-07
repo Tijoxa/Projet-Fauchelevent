@@ -102,7 +102,7 @@ train_dir = path+'train'
 test_dir = path+'testflv'
 
 ## For information
-class Averager:      ##Return the average loss
+class Averager:      ## Return the average loss
     def __init__(self):
         self.current_total = 0.0
         self.iterations = 0.0
