@@ -132,7 +132,7 @@ train_dataset = WheatDataset(train_df, train_dir, trans, True)
 indices = torch.randperm(len(train_dataset)).tolist()
 
 train_data_loader = DataLoader(
-    train_df,
+    train_dataset,
     batch_size = 16,
     shuffle = False,
     num_workers = 4,
