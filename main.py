@@ -74,7 +74,7 @@ class WheatDataset(Dataset):
         if (self.train == False):    # For test data
             return image, image_id
 
-        # Else for train and validation data
+        # Else for train data
         records = self.df[self.df['image_id'] == image_id]
         boxes = records[['x', 'y', 'w', 'h']].values
         boxes[:, 2] = boxes[:, 0] + boxes[:, 2]
