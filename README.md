@@ -8,8 +8,8 @@ librairies à installer :
 - cv2 (opencv-python)
 - pil (pillow)
 - torch
-- matplotlib
 - torchvision
+- matplotlib
 
 /root :
 main.py
