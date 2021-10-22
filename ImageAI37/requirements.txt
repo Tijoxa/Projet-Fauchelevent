@@ -1,0 +1,9 @@
+fonction pour enregistrer loss et val_loss, afficher sur tensorboard ou matplotlib
+passer à la ligne affichage epochs
+customiser enhance_data
+poids pour classes minoritaires ou créer des images en amont
+utilise + du gpu (Jean)
+
+requirements.txt pour directement installer 
+
+documenter : sur le github faire des dossiers vide de comment structurer les data
