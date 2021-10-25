@@ -331,7 +331,7 @@ class ClassificationModelTrainer:
         
         tensorboard = tf.keras.callbacks.TensorBoard(log_dir=logs_path, histogram_freq=0, write_graph=True, write_images=False)
         
-        earlystopping = tf.keras.callbacks.EarlyStopping(monitor="accuracy", min_delta=0.001, patience=5, verbose=0, mode="max", baseline=None, restore_best_weights=True)
+        earlystopping = tf.keras.callbacks.EarlyStopping(monitor="val_accuracy", min_delta=0.01, patience=5, verbose=0, mode="max", baseline=None, restore_best_weights=True)
         
         height_shift = 0
         width_shift = 0
@@ -377,7 +377,8 @@ class ClassificationModelTrainer:
                             validation_data=test_generator,
                             validation_steps=int(num_test / batch_size),
                             callbacks=[checkpoint, lr_scheduler, tensorboard, earlystopping],
-                            class_weight=class_weight_custom)
+                            class_weight=class_weight_custom,
+                            verbose=1)
 
 class CustomImageClassification:
     """
