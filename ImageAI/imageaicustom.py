@@ -10,8 +10,8 @@ import json
 class ClassificationModelTrainer:
     """
         This is the Classification Model training class, that allows you to define a deep learning network
-        from the 4 available networks types supported by ImageAI which are MobileNetv2, ResNet50,
-        InceptionV3 and DenseNet121.
+        from the 5 available networks types supported by ImageAI which are MobileNetv2, ResNet50,
+        InceptionV3, DenseNet121 and EfficientNetB7.
     """
 
     def __init__(self):
@@ -27,9 +27,6 @@ class ClassificationModelTrainer:
         self.__initial_learning_rate = 1e-3
         self.__model_collection = []
 
-    def setModelTypeAsSqueezeNet(self):
-        raise ValueError("ImageAI no longer support SqueezeNet. You can use MobileNetV2 instead by downloading the MobileNetV2 model and call the function 'setModelTypeAsMobileNetV2'")
-
     def setModelTypeAsMobileNetV2(self):
         """
         'setModelTypeAsMobileNetV2()' is used to set the model type to the MobileNetV2 model
@@ -38,10 +35,6 @@ class ClassificationModelTrainer:
         """
         self.__modelType = "mobilenetv2"
 
-    @deprecated(since="2.1.6", message="'.setModelTypeAsResNet()' has been deprecated! Please use 'setModelTypeAsResNet50()' instead.")
-    def setModelTypeAsResNet(self):
-        return self.setModelTypeAsResNet50()
-
     def setModelTypeAsResNet50(self):
         """
          'setModelTypeAsResNet()' is used to set the model type to the ResNet model
@@ -49,10 +42,6 @@ class ClassificationModelTrainer:
         :return:
         """
         self.__modelType = "resnet50"
-    
-    @deprecated(since="2.1.6", message="'.setModelTypeAsDenseNet()' has been deprecated! Please use 'setModelTypeAsDenseNet121()' instead.")
-    def setModelTypeAsDenseNet(self):
-        return self.setModelTypeAsDenseNet121()
 
     def setModelTypeAsDenseNet121(self):
         """
@@ -69,6 +58,14 @@ class ClassificationModelTrainer:
         :return:
         """
         self.__modelType = "inceptionv3"
+        
+    def setModelTypeAsEfficientNetB7(self):
+        """
+         'setModelTypeAsEfficientNetB7()' is used to set the model type to the EfficientNetB7 model
+                for the training instance object .
+        :return:
+        """
+        self.__modelType = "efficientnetb7"
 
     def setDataDirectory(self, data_directory="", train_subdirectory="train", test_subdirectory="test",
                          models_subdirectory="models", json_subdirectory="json"):
@@ -295,13 +292,45 @@ class ClassificationModelTrainer:
 
             base_model = tf.keras.applications.DenseNet121(input_shape=(training_image_size, training_image_size, 3), weights= None, classes=num_objects,
                 include_top=False, pooling="avg")
+                
+        elif (self.__modelType == "efficientnetb7"):
+            if (continue_from_model != None):
+                model = tf.keras.applications.EfficientNetB7(input_shape=(training_image_size, training_image_size, 3), weights=continue_from_model, classes=num_objects,
+                include_top=True)
+                if (show_network_summary == True):
+                    print("Training using weights from a previouly model")
+            elif (transfer_from_model != None):
+                base_model = tf.keras.applications.EfficientNetB7(input_shape=(training_image_size, training_image_size, 3), weights= transfer_from_model,
+                include_top=False, pooling="avg")
+
+                network = base_model.output
+                network = tf.keras.layers.Dense(num_objects, activation='softmax',
+                         use_bias=True)(network)
+                
+                model = tf.keras.model.Models(inputs=base_model.input, outputs=network)
+
+                if (show_network_summary == True):
+                    print("Training using weights from a pre-trained ImageNet model")
+            else:
+                base_model = tf.keras.applications.EfficientNetB7(input_shape=(training_image_size, training_image_size, 3), weights= None, classes=num_objects,
+                include_top=False, pooling="avg")
+
+                network = base_model.output
+                network = tf.keras.layers.Dense(num_objects, activation='softmax',
+                         use_bias=True)(network)
+                
+                model = tf.keras.models.Model(inputs=base_model.input, outputs=network)
+
+            base_model = tf.keras.applications.EfficientNetB7(input_shape=(training_image_size, training_image_size, 3), weights= None, classes=num_objects,
+                include_top=False, pooling="avg")
 
         optimizer = tf.keras.optimizers.Adam(lr=self.__initial_learning_rate, decay=1e-4)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
+        
         if (show_network_summary == True):
             model.summary()
 
-        model_name = 'model_ex-{epoch:03d}_acc-{accuracy:03f}.h5'
+        model_name = 'model - epoch {epoch:03d} - val_acc {val_accuracy:03f}.h5'
 
         log_name = '{}_lr-{}_{}'.format(self.__modelType, initial_learning_rate, time.strftime("%Y-%m-%d-%H-%M-%S"))
 
@@ -327,11 +356,11 @@ class ClassificationModelTrainer:
         if(save_full_model == True):
             save_weights_condition = False
 
-        checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_path, monitor='accuracy', verbose=1, save_weights_only=save_weights_condition, save_best_only=True, period=1)
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_path, monitor='val_accuracy', verbose=1, save_weights_only=save_weights_condition, save_best_only=True, period=1)
         
         tensorboard = tf.keras.callbacks.TensorBoard(log_dir=logs_path, histogram_freq=0, write_graph=True, write_images=False)
         
-        earlystopping = tf.keras.callbacks.EarlyStopping(monitor="val_accuracy", min_delta=0.01, patience=5, verbose=0, mode="max", baseline=None, restore_best_weights=True)
+        earlystopping = tf.keras.callbacks.EarlyStopping(monitor="val_accuracy", min_delta=0.001, patience=10, verbose=0, mode="max", baseline=None, restore_best_weights=True)
         
         height_shift = 0
         width_shift = 0
@@ -382,8 +411,8 @@ class ClassificationModelTrainer:
 
 class CustomImageClassification:
     """
-    This is the image classification class for custom models trained with the 'ClassificationModelTrainer' class. It provides support for 4 different models which are:
-    ResNet50, MobileNetV2, DenseNet121 and Inception V3. After instantiating this class, you can set it's properties and
+    This is the image classification class for custom models trained with the 'ClassificationModelTrainer' class. It provides support for 5 different models which are:
+    ResNet50, MobileNetV2, DenseNet121, Inception V3 and EfficientNetB7. After instantiating this class, you can set it's properties and
     make image classification using it's pre-defined functions.
 
     The following functions are required to be called before a classification can be made
@@ -456,6 +485,14 @@ class CustomImageClassification:
         :return:
         """
         self.__modelType = "inceptionv3"
+        
+    def setModelTypeAsEfficientNetB7(self):
+        """
+         'setModelTypeAsEfficientNetB7()' is used to set the model type to the InceptionV3 model
+                for the classification instance object .
+        :return:
+        """
+        self.__modelType = "efficientnetb7"
 
     def loadModel(self, classification_speed="normal", num_objects=10):
         """
@@ -520,6 +557,15 @@ class CustomImageClassification:
                     self.__modelLoaded = True
                 except:
                     raise ValueError("An error occured. Ensure your model file is in {}".format(self.modelPath))
+                    
+            elif (self.__modelType == "efficientnetb7"):
+                try:
+                    model = tf.keras.applications.EfficientNetB7(input_shape=(self.__input_image_size, self.__input_image_size, 3), weights=self.modelPath, classes = num_objects )
+                    self.__model_collection.append(model)
+                    self.__modelLoaded = True
+                except:
+                    raise ValueError("An error occured. Ensure your model file is in {}".format(self.modelPath))
+                    
     def loadFullModel(self, classification_speed="normal", num_objects=10):
         """
         'loadFullModel()' function is used to load the model structure into the program from the file path defined
@@ -619,6 +665,8 @@ class CustomImageClassification:
                 image_to_predict = tf.keras.applications.inception_v3.preprocess_input(image_to_predict)
             elif (self.__modelType == "densenet121"):
                 image_to_predict = tf.keras.applications.densenet.preprocess_input(image_to_predict)
+            elif (self.__modelType == "efficientnetb7"):
+                image_to_predict = tf.keras.applications.efficientnet_b6.preprocess_input(image_to_predict)
             try:
                 model = self.__model_collection[0]
                 prediction = model.predict(image_to_predict, steps=1)
@@ -640,8 +688,3 @@ class CustomImageClassification:
                 raise ValueError("Error. Ensure your input image is valid")
 
             return classification_results, classification_probabilities
-
-    @deprecated(since="2.1.6", message="'.predictImage()' has been deprecated! Please use 'classifyImage()' instead.")
-    def predictImage(self, image_input, result_count=5, input_type="file"):
-
-        return self.classifyImage(image_input, result_count, input_type)
