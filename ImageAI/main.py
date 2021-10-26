@@ -7,7 +7,7 @@ sys.path.append(path)
 from imageaicustom import ClassificationModelTrainer
 
 model_trainer = ClassificationModelTrainer()
-model_trainer.setModelTypeAsMobileNetV2()
+model_trainer.setModelTypeAsDenseNet121()
 model_trainer.setDataDirectory(path + "dataset", json_subdirectory = path, test_subdirectory = path + "dataset/validation")
 
 ## class_weigth_custom
@@ -23,16 +23,16 @@ for i in range(len(dirlist)):
 
 maxLengthLabel = max(lengthLabel)
 
-class_weight_custom = {i: maxLengthLabel/lengthLabel[i] for i in range(lengthLabel)}  # the json file provides the mapping between the folder name and the number of its class
+class_weight_custom = {i: maxLengthLabel/lengthLabel[i] for i in range(len(dirlist))}  # the json file provides the mapping between the folder name and the number of its class
 
 ##
-model_trainer.trainModel(num_objects=4, num_experiments=50, enhance_data=True, batch_size=4, training_image_size=1024, class_weight_custom=class_weight_custom)
+model_trainer.trainModel(num_objects=4, num_experiments=100, enhance_data=True, batch_size=2, training_image_size=1024, class_weight_custom=class_weight_custom)
 
 ## Test
 from imageaicustom import CustomImageClassification
 
 prediction = CustomImageClassification()
-prediction.setModelTypeAsMobileNetV2()
+prediction.setModelTypeAsDenseNet121()
 prediction.setModelPath(path + "dataset/models/model_ex-013_acc-0.510417.h5")
 prediction.setJsonPath(path +"model_class.json")
 prediction.loadModel(num_objects=4)
