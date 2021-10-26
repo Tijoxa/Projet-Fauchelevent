@@ -23,7 +23,7 @@ for i in range(len(dirlist)):
 
 maxLengthLabel = max(lengthLabel)
 
-class_weight_custom = {0: maxLengthLabel/lengthLabel[0], 1: maxLengthLabel/lengthLabel[1], 2: maxLengthLabel/lengthLabel[2], 3: maxLengthLabel/lengthLabel[3]}  # the json file provides the mapping between the folder name and the number of its class
+class_weight_custom = {i: maxLengthLabel/lengthLabel[i] for i in range(lengthLabel)}  # the json file provides the mapping between the folder name and the number of its class
 
 ##
 model_trainer.trainModel(num_objects=4, num_experiments=50, enhance_data=True, batch_size=4, training_image_size=1024, class_weight_custom=class_weight_custom)
