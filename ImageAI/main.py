@@ -3,13 +3,6 @@ path = "C:/Users/DL/Documents/code/GitHub/ImageAI/"
 import sys
 sys.path.append(path)
 
-## Train
-from imageaicustom import ClassificationModelTrainer
-
-model_trainer = ClassificationModelTrainer()
-model_trainer.setModelTypeAsDenseNet121()
-model_trainer.setDataDirectory(path + "dataset", json_subdirectory = path, test_subdirectory = path + "dataset/validation")
-
 ## class_weigth_custom
 import os
 
@@ -25,8 +18,45 @@ maxLengthLabel = max(lengthLabel)
 
 class_weight_custom = {i: maxLengthLabel/lengthLabel[i] for i in range(len(dirlist))}  # the json file provides the mapping between the folder name and the number of its class
 
+## Train MobileNetV2
+from imageaicustom import ClassificationModelTrainer
+
+model_trainer = ClassificationModelTrainer()
+model_trainer.setModelTypeAsMobileNetV2()
+model_trainer.setDataDirectory(path + "dataset", json_subdirectory = path, test_subdirectory = path + "dataset/validation")
+
 ##
-model_trainer.trainModel(num_objects=4, num_experiments=100, enhance_data=True, batch_size=2, training_image_size=1024, class_weight_custom=class_weight_custom)
+model_trainer.trainModel(num_objects=4, num_experiments=1, enhance_data=True, batch_size=4, training_image_size=1024, class_weight_custom=class_weight_custom)
+
+## Train DenseNet121
+from imageaicustom import ClassificationModelTrainer
+
+model_trainer = ClassificationModelTrainer()
+model_trainer.setModelTypeAsDenseNet121()
+model_trainer.setDataDirectory(path + "dataset", json_subdirectory = path, test_subdirectory = path + "dataset/validation")
+
+##
+model_trainer.trainModel(num_objects=4, num_experiments=1, enhance_data=True, batch_size=2, training_image_size=1024, class_weight_custom=class_weight_custom)
+
+## Train ResNet50
+from imageaicustom import ClassificationModelTrainer
+
+model_trainer = ClassificationModelTrainer()
+model_trainer.setModelTypeAsResNet50()
+model_trainer.setDataDirectory(path + "dataset", json_subdirectory = path, test_subdirectory = path + "dataset/validation")
+
+##
+model_trainer.trainModel(num_objects=4, num_experiments=1, enhance_data=True, batch_size=4, training_image_size=256, class_weight_custom=class_weight_custom)
+
+## Train EfficientNetB7 - doesn't work
+from imageaicustom import ClassificationModelTrainer
+
+model_trainer = ClassificationModelTrainer()
+model_trainer.setModelTypeAsEfficientNetB7()
+model_trainer.setDataDirectory(path + "dataset", json_subdirectory = path, test_subdirectory = path + "dataset/validation")
+
+##
+model_trainer.trainModel(num_objects=4, num_experiments=5, enhance_data=True, batch_size=4, training_image_size=128, class_weight_custom=class_weight_custom)
 
 ## Test
 from imageaicustom import CustomImageClassification
