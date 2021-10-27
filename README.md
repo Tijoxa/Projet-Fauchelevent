@@ -6,14 +6,7 @@ Le projet Fauchelevent est un projet écologique mis en place par l'entreprise M
 
 ## La structure du dépôt gitHub
 
-Nous avons d'abord abordé le problème avec les outils TensorFlow Object Detection (TFOD) et PyTorch. L'objectif était de faire de la détection d'images : l'algorithme serait capable d'identifier individuellement chaque plant grâce à des bounding boxes et de les classifier : pousse, tallage, épi ou moisson (les 4 stades de croissance). En pratique, cela a été difficile car la labellisation des images étaient trop chronophage étant donné que l'algorithme s'entraînait sur des images de champs. Nous avons donc réduit le problème à un simple problème de classification. Nous avons donc utilisé ImageAI.
-
-Le dépôt gitHub est donc constitué du reste de nos pistes sur TFOD et PyTorch :
-- TFOD37 (Version de Python 3.7)
-- PyTorch38 (Version de Python 3.8)
-
-Il est également constitué de notre algorithme final :
-- ImageAI
+Ce dépôt GitHub recense à la fois le livrable final (ImageAI) mais aussi les pistes explorées puis abandonnées (TFOD et PyTorch). Nous avons dédié une partie explicative dans ce README pour chaque dossier présent à la racine du projet. Nous y avons explicité les intallations nécessaires, le fonctionnement de l'algorithme et les erreurs rencontrées. Nous avons aussi tenu à expliquer pourquoi nous avons abandonné les pistes TFOD et PyTorch pour une meilleure compréhension de notre démarche au cours des 7 semaines qui ont rythmé ce projet.
 
 ## ImageAI
 ## TFOD37
@@ -25,7 +18,7 @@ Cet algorithme se divise en deux jupyter notebooks :
 - 2 : Installation de TFOD, training et testing
 
 ### Steps
-<br />
+
 <b>Step 1.</b> Cloner ce dépôt: https://github.com/nicknochnack/TFODCourse dans un dossier nommé TFODCourse
 <br/><br/>
 <b>Step 2.</b> Créer un nouvel environnement virtuel nommé tfod (pour tensorflow object detection) dans le dossier TFODCourse
