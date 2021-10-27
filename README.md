@@ -51,7 +51,7 @@ python -m ipykernel install --user --name=tfodj
 \TFODCourse\Tensorflow\workspace\images\train<br />
 \TFODCourse\Tensorflow\workspace\images\test
 <br/><br/>
-<b>Step 7.</b> Commencer le processus de training en ouvrant <a href="https://github.com/nicknochnack/TFODCourse/blob/main/2.%20Training%20and%20Detection.ipynb">2. Training and Detection.ipynb</a>, ce notebook vous guidera dans l'installation de Tensorflow Object Detection, la réalisation de détections, la sauvegarde et l'exportation du modèle. 
+<b>Step 7.</b> Commencer le processus de training en ouvrant <a href="https://github.com/Tijoxa/Projet-Fauchelevent/blob/main/TFOD37/2.%20Training%20and%20Detection.ipynb">2. Training and Detection.ipynb</a>, ce notebook vous guidera dans l'installation de Tensorflow Object Detection, la réalisation de détections, la sauvegarde et l'exportation du modèle. 
 <br /><br/>
 <b>Step 8.</b> Au cours de ce processus, le Notebook installera Tensorflow Object Detection. Vous devriez idéalement recevoir une notification indiquant que l'API a été installée avec succès à l'étape 8 avec la dernière ligne indiquant OK.  
 <img src="https://i.imgur.com/FSQFo16.png">
