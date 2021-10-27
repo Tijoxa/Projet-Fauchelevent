@@ -44,7 +44,7 @@ pip install ipykernel
 python -m ipykernel install --user --name=tfodj
 </pre>
 <br/>
-<b>Step 5.</b> Labelliser les images en utilisant le Notebook <a href="https://github.com/nicknochnack/TFODCourse/blob/main/1.%20Image%20Collection.ipynb">1. Image Collection.ipynb</a> - s'assurer que l'on a bien changé mis l'environnement virtuel en kernel comme montré sur la photo ci-dessous
+<b>Step 5.</b> Labelliser les images en utilisant le Notebook <a href="https://github.com/Tijoxa/Projet-Fauchelevent/blob/main/TFOD37/1.%20Image%20Collection.ipynb">1. Image Collection.ipynb</a> - s'assurer que l'on a bien changé mis l'environnement virtuel en kernel comme montré sur la photo ci-dessous
 <img src="https://i.imgur.com/8yac6Xl.png"> 
 <br/>
 <b>Step 6.</b> Diviser manuellement les images labellisées en deux dossiers train et test. Manually divide collected images into two folders train and test. Alors, tous les dossiers et annotations doivent maintenant être répartis entre les deux dossiers suivants. <br/>
