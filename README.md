@@ -1,5 +1,7 @@
 # Projet-Fauchelevent
 
+<img src="https://le-cdn.website-editor.net/22136137722b4fd9bef4eaa9defe6148/dms3rep/multi/opt/logo_farmbot_fauchelevent-596w.png">
+
 Le projet Fauchelevent est un projet écologique mis en place par l'entreprise Metigate. L'objectif de ce projet est de déterminer l'impact du climat sur la production agricole via une collecte de données agronomiques. Pour y parvenir, Metigate nous a demandé de concevoir un algorithme permettant de déterminer 4 stades de croissance de l'orge à partir de photos prises par un robot potager Farmbot.
 
 ## La structure du dépôt gitHub
@@ -66,6 +68,15 @@ et ouvrir Tensorboard avec la commande suivante
 <pre>tensorboard --logdir=. </pre>
 Tensorboard sera accessible via votre navigateur et on pourra voir des mesures telles que la mAP (précision moyenne) et le Recall.
 <br />
+
+### Abandon de la piste TFOD
+
+Nous avons décidé d'abandonner l'utilisation de TFOD car nous avons décidé d'abandonner la piste de détection d'images.En grande partie, cela est dû à notre jeu de données et le travail colossal que représente la labellisation.
+Deux choix s'offraient à nous, chacun avec ses problèmes :
+- Utiliser le dataset de la compétition Global Wheat Detection pré-labellisées : La labellisation de ce dataset consiste à placer des bounding boxes autour des épis sans les classifier. Cela est problématique, car il faut catégoriser chaque bounding boxes qui peut représenter les étapes 3 ou 4 des stades de croissance. Or cela représente plus de 30 bounding boxes pour 2000 images (donc plus de 60000 classifications à faire). De plus, il faut trouver des images des stades 1 et 2 de croissance et les labelliser avec labelImg, or cela est très compliqué il y a souvent une grande quantité de pousses/tallages sur une seule image, ce qui rend la labellisation très longue et délicate.
+- Labelliser à la main des photos prises sur Internet : Comme expliqué plus haut (et comme on peut le voir sur l'image ci-dessous), il y a souvent une grande quantité de pousses/tallages/épis sur une seule image, ce qui rend la labellisation très longue et délicate.
+<img src="https://agriculture.gouv.fr/sites/minagri/files/styles/affichage_pleine-page_790x435/public/epis_de_ble.jpg?itok=CvMknqge"> 
+Pour résoudre le problème de la délicatesse de labelliser chaque plant individuellement, nous avons décidé de labelliser en grands groupes de stades d'évolution. Or, dans une même image, il était très rare que deux stades différents de croissance se présentent. Pour la plupart des images, cela revenait donc simplement à labelliser en plaçant une bounding box englobant toute l'image et en la classifiant selon le stade de croissance (souvent unique) que l'on pouvait voir. Nous avons donc simplifié le problème, en le considérant comme un simple problème de classification. Pour le résoudre, nous avons préféré utiliser l'outil ImageAI, très léger et facile à comprendre.
 
 ## PyTorch38
 
