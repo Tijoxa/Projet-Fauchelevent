@@ -18,10 +18,9 @@ from matplotlib import pyplot as plt
 import xml.etree.ElementTree as ET
 
 ## Open and process files
-path = 'C:/Users/DL/Documents/code/project with PyTorch/'
-monRepertoire = "C:/Users/DL/Documents/code/dataset Global Wheat/train xml/"
-readContentPath = 'C:/Users/DL/Desktop/00ab9e75ba68b9c4d37edd769c98fe728c61b5349915d30eb8f20298a40f5949.xml'
-WEIGHTS_FILE = path+'fasterrcnn_resnet50_fpn_best.pth'
+path = 'C:/Users/DL/Documents/code/project with PyTorch/'  # Path of the project
+monRepertoire = "C:/Users/DL/Documents/code/dataset Global Wheat/train xml/"  # 
+WEIGHTS_FILE = path+'fasterrcnn_resnet50_fpn_best.pth'  # Path of the model+weights file
 
 def read_content(xml_file: str):
     tree = ET.parse(xml_file)
@@ -48,29 +47,28 @@ def read_content(xml_file: str):
 
     return filename, list_with_all_boxes, list_with_labels
 
-name, boxes, labels = read_content(readContentPath)
-
 from os import listdir
 from os.path import isfile, join
 
 fichiers = [join(monRepertoire, f) for f in listdir(monRepertoire) if isfile(join(monRepertoire, f))]
-names = []  # liste de tous les noms de fichiers
-boxes = []  # liste de liste de toutes les bboxes
+names = []  # List of all files name
+boxes = []  # List of lists of all bounding boxes
 labels = []
 
 for file in fichiers :
-    tmp1, tmp2, tmp3 = read_content(file)  # tmp2 les la liste des bboxes au format [[xmin, ymin, xmax, ymax], [[xmin, ymin, xmax, ymax], etc.]
-    tmp1 = tmp1[:-4]  # nom des fichiers sans l'extension .png ou .jpg = image_id
-    names += [tmp1]
-    boxes += [tmp2]
-    labels += [tmp3]
+    if file.endswith(".xml"):
+        tmp1, tmp2, tmp3 = read_content(file)  # tmp2 is the list of bounding boxes in format [[xmin, ymin, xmax, ymax], [[xmin, ymin, xmax, ymax], etc.]
+        tmp1 = tmp1[:-4]  # Files name with the extension .png or .jpg, used as image_id
+        names += [tmp1]
+        boxes += [tmp2]
+        labels += [tmp3]
 
-del tmp1, tmp2, tmp3  # plus besoin
+del tmp1, tmp2, tmp3  # unneeded
 
 train_df = pd.DataFrame({'image_id' : pd.Series(dtype='string'), 'xmin' : pd.Series(dtype='int'), 'ymin' : pd.Series(dtype='int'), 'xmax' : pd.Series(dtype='int'), 'ymax' : pd.Series(dtype='int'), 'labels' : pd.Series(dtype='string')})
 
 for i in range(len(boxes)):
-    for j in range(len(boxes[i])):  # marche po
+    for j in range(len(boxes[i]))
         tmp = {'image_id': names[i], 'xmin': boxes[i][j][0], 'ymin': boxes[i][j][1], 'xmax': boxes[i][j][2], 'ymax': boxes[i][j][3], 'labels': labels[i][j]}
         train_df = train_df.append(tmp, ignore_index = True)
 
@@ -148,7 +146,7 @@ class CustomDataset(Dataset):
         return image, target, image_id
 
 train_dir = path+'train'
-test_dir = path+'testflv'
+test_dir = path+'test'
 
 ## For information
 class Averager:  # Return the average loss
