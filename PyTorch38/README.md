@@ -16,9 +16,10 @@ pip install opencv-python  # cv2
 pip install pillow  # PIL
 pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 </pre>
-<b>Step 1.bis</b> Pour utiliser le GPU lors de l'entraînement, installer CUDA 11.1 (version compatible avec cette version de Python et de Pytorch)
+<b>Step 1. bis</b> Pour utiliser le GPU lors de l'entraînement, installer CUDA 11.1 (version compatible avec cette version de Python et de Pytorch)
 
 <b>Step 2.</b> Labellisation
+
 La labellisation pour le script "former main.py" est enregistrée au format .csv, de la même façon que dans le Notebook Kaggle https://www.kaggle.com/aryaprince/getting-started-with-object-detection-with-pytorch
 
 La labellisation pour le script "main pytorch.py" se fait de la même façon que pour la partie TFOD37
