@@ -23,4 +23,35 @@ La labellisation pour le script "former main.py" est enregistrée au format .csv
 
 La labellisation pour le script "main pytorch.py" se fait de la même façon que pour la partie TFOD37
 
-<b>Step 3.</b> Run le script Python en prenant en compte les commentaires
+<b>Step 3.</b> Scructurer les dossiers du projet
+Pour "former main.py"
+<pre>
+> former main.py
+> fasterrcnn_resnet50_fpn_best.pth
+> sample_submission.csv
+> train.csv
+> output.png
+> test/test1.png
+       test2.png
+       ...
+> train/train1.png
+        train2.png
+        ...
+</pre>
+Pour "main pytorch.py"
+<pre>
+> main pytorch.py
+> fasterrcnn_resnet50_fpn_best.pth
+> sample_submission.xml
+> output.png
+> test/test1.png
+       test2.png
+       ...
+> train/train1.png
+        train1.xml
+        train2.png
+        train2.xml
+        ...
+</pre>
+
+<b>Step 4.</b> Run le script Python en prenant en compte les commentaires
