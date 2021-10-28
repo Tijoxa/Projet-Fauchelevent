@@ -356,7 +356,7 @@ class ClassificationModelTrainer:
         if(save_full_model == True):
             save_weights_condition = False
 
-        checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_path, monitor='val_accuracy', verbose=1, save_weights_only=save_weights_condition, save_best_only=True, period=1)
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_path, monitor='val_accuracy', verbose=1, save_weights_only=save_weights_condition, save_best_only=False, period=1)
         
         tensorboard = tf.keras.callbacks.TensorBoard(log_dir=logs_path, histogram_freq=0, write_graph=True, write_images=False)
         
