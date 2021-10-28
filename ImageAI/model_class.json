@@ -1,6 +1,6 @@
 {
-    "0" : "Epi",
-    "1" : "Levee",
-    "2" : "Moisson",
-    "3" : "Tallage"
+    "0" : "Levee",
+    "1" : "Tallage",
+    "2" : "Epi",
+    "3" : "Moisson"
 }
