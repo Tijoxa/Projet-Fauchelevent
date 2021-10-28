@@ -208,7 +208,6 @@ model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
 model.load_state_dict(torch.load(WEIGHTS_FILE, map_location = device))  # Load only weights and biaises
 
 ## Train the model
-"""
 model.train()
 model.to(device)
 params = [p for p in model.parameters() if p.requires_grad]
@@ -242,7 +241,6 @@ while (epoch < num_epochs) and (loss_hist.value > 0.2):
     epoch += 1
 
 torch.save(model, path + "model_saved")
-"""
 
 ## Load the model
 model = torch.load(path + "model_saved.pth", map_location = 'cpu')
