@@ -41,7 +41,7 @@ python -m ipykernel install --user --name=tfodj
 <img src="https://i.imgur.com/FSQFo16.png">
 Si ce n'est pas le cas, résoudre les erreurs d'installation en se référant au <a href="https://github.com/nicknochnack/TFODCourse/blob/main/README.md">Guide des erreurs.md</a> de ce dossier.
 <br /> <br/>
-<b>Step 9.</b> Une fois que vous êtes arrivé à l'étape 6. Entraîner le modèle à l'intérieur du carnet de notes, vous pouvez choisir d'entraîner le modèle à l'intérieur du carnet de notes. Nous avons cependant remarqué que l'entraînement à l'intérieur d'un terminal séparé sur une machine Windows permet d'afficher des mesures de perte en direct. 
+<b>Step 9.</b> Une fois que vous êtes arrivé à l'étape 6. Entraîner le modèle à l'intérieur du carnet de notes, vous pouvez choisir d'entraîner le modèle à l'intérieur du carnet de notes. Nous avons cependant remarqué que l'entraînement à l'intérieur d'un terminal séparé sur une machine Windows permet d'afficher des mesures de la loss_function en direct. 
 <img src="https://i.imgur.com/K0wLO57.png"> 
 <br />
 <b>Step 10.</b> On peut éventuellement évaluer le modèle à l'intérieur de Tensorboard. Une fois que le modèle a été formé et que vous avez exécuté la commande d'évaluation à l'étape 7. Naviguer vers le dossier d'évaluation de votre modèle formé. e.g. 
