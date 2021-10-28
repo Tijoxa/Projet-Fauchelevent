@@ -4,7 +4,7 @@
 
 Le projet Fauchelevent est un projet écologique mis en place par l'entreprise Metigate. L'objectif de ce projet est de déterminer l'impact du climat sur la production agricole via une collecte de données agronomiques. Pour y parvenir, Metigate nous a demandé de concevoir un algorithme permettant de déterminer 4 stades de croissance de l'orge à partir de photos prises par un robot potager Farmbot.
 
-## La structure du dépôt gitHub
+## La structure du dépôt GitHub
 
 Ce dépôt GitHub recense à la fois le livrable final (ImageAI) mais aussi les pistes explorées puis abandonnées (TFOD et PyTorch). Nous avons dédié une partie explicative dans ce README pour chaque dossier présent à la racine du projet. Nous y avons explicité les intallations nécessaires, le fonctionnement de l'algorithme et les erreurs rencontrées. Nous avons aussi tenu à expliquer pourquoi nous avons abandonné les pistes TFOD et PyTorch pour une meilleure compréhension de notre démarche au cours des 7 semaines qui ont rythmé ce projet.
 
