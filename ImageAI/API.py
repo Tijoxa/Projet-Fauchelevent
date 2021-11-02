@@ -43,8 +43,8 @@ def loadFiles():
     test_path = path + "dataset/test/"
     for file in files :
         shutil.move(file, test_path)
-    text = Label(frame, text = 'All files loaded!')
-    text.pack()
+    text = Label(root, text = 'All files loaded!')
+    text.pack(expand = YES)
     
 def nextImage(number_image):
     img = Image.open(files[number_image])
