@@ -5,8 +5,9 @@ import time
 import os
 from PIL import Image, ImageTk
 
-# Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/geyma/Documents/Centrale Digital Lab/Projet Metigate - Fauchelevent/API/"
+# Current path for the API needs to be updated in the main_for_API.py script if run on another device
+from main_for_API import getPath
+path = getPath()
 os.chdir(path)
 
 import shutil
