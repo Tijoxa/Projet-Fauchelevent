@@ -372,7 +372,12 @@ class ClassificationModelTrainer:
 
         train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1. / 255,
-            horizontal_flip=enhance_data, height_shift_range=height_shift, width_shift_range=width_shift)
+            horizontal_flip=enhance_data,
+            vertical_flip=enhance_data,
+            brightness_range=[-50, 50],
+            zoom_range=0.5,
+            height_shift_range=height_shift,
+            width_shift_range=width_shift)
 
         test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1. / 255)
