@@ -412,7 +412,8 @@ class ClassificationModelTrainer:
                             validation_steps=int(num_test / batch_size),
                             callbacks=[checkpoint, lr_scheduler, tensorboard, earlystopping],
                             class_weight=class_weight_custom,
-                            verbose=1)
+                            max_queue_size=1,
+                            verbose=0)  # max_queue_size can be changed if enough memory
 
 class CustomImageClassification:
     """
