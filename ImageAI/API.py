@@ -43,34 +43,54 @@ def loadFiles():
         shutil.move(file, test_path)
     text = Label(frame, text = 'All files loaded!')
     text.pack()
+    
+def nextImage(number_image):
+    img = Image.open(files[number_image])
+    tk_img = ImageTk.PhotoImage(img)
+    label_image = Label(frame_prediction, image=tk_img)
+    label_image.image = tk_img
+    label_image.pack()
+    if number_image == len(files)-1:
+        number_image=0
+    else:
+        number_image+=1
+    return label_image
 
-def openWindowPrediction(photo):
+def openWindowPrediction():
+    test_path = path + "dataset/test/"
+    files_abspath = []
+    for file in files :
+        files_abspath.append(test_path + os.path.basename(file))
+
     newWindow = Toplevel(root)
     newWindow.title('Predict Window')
     #newWindow.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
     newWindow.geometry('1920x1010')
 
     frame_prediction = Frame(newWindow)
-    frame_prediction.pack(side = LEFT)
+    frame_prediction.pack(side=LEFT)
 
-    img = Image.open(photo)
+    number_image = 0
+
+    img = Image.open(files_abspath[number_image])
     tk_img = ImageTk.PhotoImage(img)
-    label_image = Label(frame_prediction, image = tk_img)
+    label_image = Label(frame_prediction, image=tk_img)
     label_image.image = tk_img
     label_image.pack()
 
-    # Mettre là tous les boutons relatifs à la 2e fenêtre
-    button_next = Button(frame_prediction, text = 'Image suivante')  # Rajouter la commande
+    number_image+=1
+
+    button_next = Button(newWindow, text = 'Image suivante', command = lambda:[label_image.destroy(), nextImage(number_image)]) #Rajouter la commande
     button_next.pack()
 
-    OptionList = ["Levee", "Tallage", "Epi", "Moisson"]  # Repiquer depuis le main_for_API.py ou depuis le json
+    OptionList = ["Levee","Tallage","Epi","Moisson"]
     variable = StringVar(newWindow)
-    variable.set(OptionList[0])  # Changer pour qu'il donne la valeur de la prédiction de l'algo
+    variable.set(OptionList[0]) #Changer pour qu'il donne la valeur de la prédiction de l'algo
     opt = OptionMenu(newWindow, variable, *OptionList)
-    opt.pack(expand = YES)
+    opt.pack(expand=YES)
 
-    valid_button = Button(newWindow, text = 'Valid', command = lambda:[user_valid(), newWindow.destroy()])
-    valid_button.pack(expand = YES)
+    valid_button = Button(newWindow, text='Valid', command=lambda:[user_valid(),newWindow.destroy()])
+    valid_button.pack(expand=YES)
 
 
 def user_valid(preds, label_img):
