@@ -11,7 +11,8 @@ path = getPath()
 os.chdir(path)
 
 import shutil
-from main_for_API import testModelFunction
+import json
+from main_for_API import testModelFunction, readJson
 
 ## Variables globales
 WINDOW_WIDTH = 1280
@@ -52,9 +53,9 @@ def nextImage(number_image):
     label_image.image = tk_img
     label_image.pack()
     if number_image == len(files)-1:
-        number_image=0
+        number_image = 0
     else:
-        number_image+=1
+        number_image += 1
     return label_image
 
 def openWindowPrediction(photo):
@@ -79,14 +80,17 @@ def openWindowPrediction(photo):
     label_image.image = tk_img
     label_image.pack()
 
-    number_image+=1
+    number_image += 1
 
-    button_next = Button(newWindow, text = 'Image suivante', command = lambda:[label_image.destroy(), nextImage(number_image)]) #Rajouter la commande
+    button_next = Button(newWindow, text = 'Image suivante', command = lambda:[label_image.destroy(), nextImage(number_image)])  # Rajouter la commande
     button_next.pack()
 
-    OptionList = ["Levee","Tallage","Epi","Moisson"]
+    # OptionList = ["Levee", "Tallage", "Epi", "Moisson"]  # Prendre depuis l'autre script :
+    OptionDict = readJson()
+    OptionList = [value for key, value in OptionDict.items()]
+    
     variable = StringVar(newWindow)
-    variable.set(OptionList[0]) #Changer pour qu'il donne la valeur de la prédiction de l'algo
+    variable.set(OptionList[0])  # Changer pour qu'il donne la valeur de la prédiction de l'algo
     opt = OptionMenu(newWindow, variable, *OptionList)
     opt.pack(expand = YES)
 
