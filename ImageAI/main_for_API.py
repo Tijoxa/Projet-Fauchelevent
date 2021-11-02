@@ -1,7 +1,7 @@
 import os
 
 # Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/geyma/Documents/Centrale Digital Lab/Projet Metigate - Fauchelevent/API/"
+path = "C:/Users/Tijoxa/Desktop/code/ImageAI/"
 os.chdir(path)
 
 import sys
@@ -58,7 +58,7 @@ def trainModelFunction(model, dataset_directory = path + "dataset", json_subdire
     model_trainer.setDataDirectory(dataset_directory, json_subdirectory = json_subdirectory, test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
     model_trainer.trainModel(num_objects = len(dirdict), num_experiments = num_experiments, enhance_data = True, batch_size = 4, training_image_size = 1024, class_weight_custom = class_weight_custom)
 
-trainModelFunction(test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
+# trainModelFunction(test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
 
 ## Test
 from imageaicustom import CustomImageClassification
@@ -87,8 +87,7 @@ def testModelFunction(model_type, folder_path, model_path):
         preds[file]=prediction.classifyImage(file_path, result_count=1)
     return preds
 
-print(testModelFunction("mobilenetv2"))
-
+# print(testModelFunction("mobilenetv2"))
 
 ## Confusion matrix
 from tensorflow.math import confusion_matrix
@@ -107,11 +106,11 @@ def confusionMatrix(test_subdirectory):
 
         for file_name in name_list:
             preds = testModelFunction(file_path = folder_name + file_name)
-            predictions, probabilities = preds[]
+            predictions, probabilities = preds[file_name]
             for i in range(len(dirdict)):
                 if (predictions[0] == dirdict['{}'.format(i)]):
                     y_test += [i]
 
     print(confusion_matrix(y_true, y_test), y_test)
 
-confusionMatrix(test_subdirectory = test_subdirectory)
+# confusionMatrix(test_subdirectory = test_subdirectory)
