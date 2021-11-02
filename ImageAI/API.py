@@ -16,24 +16,32 @@ from main_for_API import testModelFunction
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 files = []
-model_type="mobilenetv2"
+model_type = "mobilenetv2"
 
 ## Command functions
 
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
-    FILETYPES = [("Images PNG",".png"),("Images JPG",".jpg")]
-    files_path = askopenfilename(title = "Select a file ...", filetypes=FILETYPES)
+    FILETYPES = [("Images PNG",".png"), ("Images JPG",".jpg")]
+    files_path = askopenfilename(title = "Select a file ...", filetypes = FILETYPES)
     files.append(files_path)
-    text = Label(frame, text=os.path.basename(files_path))
+    text = Label(frame, text = os.path.basename(files_path))
     text.pack()
+    '''
+    AFTER edit l.3 -> from tkinter.filedialog import askopenfilenames
+    files_path = askopenfilenames(title = "Select a file ...", filetypes = FILETYPES)
+    for i in range(len(files_path)):
+        files.append(files_path[i])
+        text = Label(frame, text = os.path.basename(files_path[i]))
+        text.pack()
+    '''
 
 def loadFiles():
     '''Store the selected images into the test folder in the dataset folder'''
     test_path = path + "dataset/test/"
     for file in files :
-        shutil.move(file,test_path)
-    text = Label(frame, text='Upload successful !')
+        shutil.move(file, test_path)
+    text = Label(frame, text = 'All files loaded!')
     text.pack()
 
 def openWindowPrediction(photo):
@@ -43,26 +51,26 @@ def openWindowPrediction(photo):
     newWindow.geometry('1920x1010')
 
     frame_prediction = Frame(newWindow)
-    frame_prediction.pack(side=LEFT)
+    frame_prediction.pack(side = LEFT)
 
     img = Image.open(photo)
     tk_img = ImageTk.PhotoImage(img)
-    label_image = Label(frame_prediction, image=tk_img)
+    label_image = Label(frame_prediction, image = tk_img)
     label_image.image = tk_img
     label_image.pack()
 
     # Mettre là tous les boutons relatifs à la 2e fenêtre
-    button_next = Button(frame_prediction, text = 'Image suivante') #Rajouter la commande
+    button_next = Button(frame_prediction, text = 'Image suivante')  # Rajouter la commande
     button_next.pack()
 
-    OptionList = ["Levee","Tallage","Epi","Moisson"]
+    OptionList = ["Levee", "Tallage", "Epi", "Moisson"]  # Repiquer depuis le main_for_API.py ou depuis le json
     variable = StringVar(newWindow)
-    variable.set(OptionList[0]) #Changer pour qu'il donne la valeur de la prédiction de l'algo
+    variable.set(OptionList[0])  # Changer pour qu'il donne la valeur de la prédiction de l'algo
     opt = OptionMenu(newWindow, variable, *OptionList)
-    opt.pack(expand=YES)
+    opt.pack(expand = YES)
 
-    valid_button = Button(newWindow, text='Valid', command=lambda:[user_valid(),newWindow.destroy()])
-    valid_button.pack(expand=YES)
+    valid_button = Button(newWindow, text = 'Valid', command = lambda:[user_valid(), newWindow.destroy()])
+    valid_button.pack(expand = YES)
 
 
 def user_valid(preds, label_img):
@@ -81,7 +89,7 @@ def displayImage(image, window):
     canvas = Canvas(window, height=300, width=300)
     img = img.resize((300, 300), Image.BICUBIC)
     photo = ImageTk.PhotoImage(img)
-    item = canvas.create_image(0,0, image = photo)
+    item = canvas.create_image(0, 0, image = photo)
     canvas.pack()
 
 def predictFiles():
@@ -92,7 +100,7 @@ def predictFiles():
     print(os.path.abspath(model_file))
     test_path = path + "dataset/test/"
     os.chdir(test_path)
-    preds = testModelFunction(model_type=model_type, folder_path=test_path, model_path=model_file)
+    preds = testModelFunction(model_type = model_type, folder_path = test_path, model_path = model_file)
     for photo in preds.keys():
         openWindowPrediction(photo)
 
@@ -158,20 +166,20 @@ def predictFiles():
 ## Root custom window
 root = Tk()
 root.title('Import Window')
-root.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
+root.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
 
 ## Structure
 frame = Frame(root)
-frame.pack(expand=YES)
+frame.pack(expand = YES)
 
-text = Label(frame, text='Upload files (.png)')
+text = Label(frame, text = 'Load files (.png)')
 text.pack()
 
-button1 = Button(frame, text='Choose files', command=chooseFiles)
+button1 = Button(frame, text = 'Choose files', command = chooseFiles)
 button1.pack()
 
-button2 = Button(root, text='Load files', command=lambda:[loadFiles(),predictFiles()])
-button2.pack(expand=YES)
+button2 = Button(root, text = 'Load files', command = lambda:[loadFiles(), predictFiles()])
+button2.pack(expand = YES)
 
 """
 button3 = Button(root, text='Predict', command=lambda:[predict_images,openWindow])
