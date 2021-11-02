@@ -22,7 +22,7 @@ model_type = "mobilenetv2"
 
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
-    FILETYPES = [("Images PNG",".png"), ("Images JPG",".jpg")]
+    FILETYPES = [("Images PNG", ".png"), ("Images JPG", ".jpg")]
     files_path = askopenfilename(title = "Select a file ...", filetypes = FILETYPES)
     files.append(files_path)
     text = Label(frame, text = os.path.basename(files_path))
