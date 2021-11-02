@@ -144,7 +144,7 @@ class ClassificationModelTrainer:
         - initial_learning_rate(optional) , this value is used to adjust the weights generated in the network. You rae advised to keep this value as it is if you don't have deep understanding of this concept.
         - show_network_summary(optional) , this value is used to show the structure of the network should you desire to see it. It is set to False by default
         - training_image_size(optional) , this value is used to define the image size on which the model will be trained. The value is 224 by default and is kept at a minimum of 100.
-        - continue_from_model (optional) , this is used to set the path to a model file trained on the same dataset. It is primarily for continuos training from a previously saved model.
+        - continue_from_model (optional) , this is used to set the path to a model file trained on the same dataset. It is primarily for continuous training from a previously saved model.
         - transfer_from_model (optional) , this is used to set the path to a model file trained on another dataset. It is primarily used to perform transfer learning.
         - transfer_with_full_training (optional) , this is used to set the pre-trained model to be re-trained across all the layers or only at the top layers.
         - initial_num_objects (required if 'transfer_from_model' is set ), this is used to set the number of objects the model used for transfer learning is trained on. If 'transfer_from_model' is set, this must be set as well.
