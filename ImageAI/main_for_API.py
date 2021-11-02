@@ -1,7 +1,9 @@
 import os
 
 # Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/Tijoxa/Desktop/code/ImageAI/"
+def getPath():
+    return "C:/Users/Tijoxa/Desktop/code/ImageAI/"
+path = getPath()
 os.chdir(path)
 
 import sys
