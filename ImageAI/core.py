@@ -91,7 +91,7 @@ def trainModelFunction(model, dataset_directory = path + "dataset", json_subdire
 
     createValidationFolders()
 
-    model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
+    model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory=path + "dataset/validation", train_subdirectory=path + "dataset/train")
     model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=1, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
 
     removeValidationFolders()
@@ -122,8 +122,8 @@ def testModelFunction(model_type, folder_path, model_path):
 
     preds={}
     for file in os.listdir(folder_path):
-        file_path = folder_path+file
-        preds[file]=prediction.classifyImage(file_path, result_count=1)
+        file_path = folder_path + file
+        preds[file] = prediction.classifyImage(file_path, result_count=1)
     return preds
 
 # print(testModelFunction("mobilenetv2"))
