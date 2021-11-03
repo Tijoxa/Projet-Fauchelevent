@@ -3,25 +3,26 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 import time
 import os
-from PIL import Image, ImageTk
-import keyboard
 
 # Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/geyma/Documents/Centrale Digital Lab/Projet Metigate - Fauchelevent/API/"
+path = "C:/Users/DL/Documents/code/GitHub/projet_test/ImageAI/"
 os.chdir(path)
 
+from PIL import Image, ImageTk
+import keyboard
 import shutil
-from core import trainModelFunction, testModelFunction
+
+###
+from core import trainModelFunction, testModelFunction, readJson, getModelType
 
 ## Variables globales
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 files = []
-model_type="mobilenetv2"
+model_type = getModelType()
 dataset_path = path + "dataset/"
 
 ## Command functions
-
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
     FILETYPES = [("Images PNG",".png"),("Images JPG",".jpg")]
@@ -34,8 +35,11 @@ def loadFiles():
     '''Store the selected images into the test folder in the dataset folder'''
     test_path = path + "dataset/test/"
     for file in files :
-        shutil.move(file,test_path)
-    text = Label(frame, text='Upload successful !')
+        try :
+            shutil.move(file,test_path)
+        except :
+            pass
+    text = Label(frame, text='Files successfully loaded!')
     text.pack()
 
 def nextImage(number_image):
@@ -72,8 +76,7 @@ def openWindowPrediction(photo):
 
     newWindow = Toplevel(root)
     newWindow.title('Predict Window')
-    #newWindow.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
-    newWindow.geometry('1920x1010')
+    newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
 
     frame_prediction = Frame(newWindow)
     frame_prediction.pack(side=LEFT)
@@ -84,9 +87,11 @@ def openWindowPrediction(photo):
     label_image.image = tk_img
     label_image.pack()
 
-    OptionList = ["Levee","Tallage","Epi","Moisson"]
+    OptionDict = readJson()
+    OptionList = [value for key, value in OptionDict.items()]
+
     variable = StringVar(newWindow)
-    variable.set(OptionList[0]) #Changer pour qu'il donne la valeur de la prédiction de l'algo
+    variable.set(OptionList[0])  # Changer pour qu'il donne la valeur de la prédiction de l'algo
     opt = OptionMenu(newWindow, variable, *OptionList)
     opt.pack(expand=YES)
 
@@ -97,7 +102,7 @@ def openWindowPrediction(photo):
         train_path = path + "dataset/train/" + validation
         shutil.move(img_path,train_path)
 
-    valid_button = Button(newWindow, text='Valid', command=lambda:[user_valid(photo),newWindow.destroy()])
+    valid_button = Button(newWindow, text='Valid', command=lambda:[user_valid(photo), newWindow.destroy()])
     valid_button.pack(expand=YES)
 
 def user_not_valid():
@@ -122,7 +127,7 @@ def predictFiles():
     for photo in preds.keys():
         openWindowPrediction(photo)
 
-    #Les images sont maintenant dans leurs folders respectifs dans train. On va maintenant créer une nouvelle fenêtre pour pouvoir entraîner le modèle sur toutes les données présentes dans le train
+    # Les images sont maintenant dans leurs folders respectifs dans train. On va maintenant créer une nouvelle fenêtre pour pouvoir entraîner le modèle sur toutes les données présentes dans le train
 
     openWindowTraining(model_file)
 
@@ -187,17 +192,16 @@ def predictFiles():
 
 ## Root custom window
 root = Tk()
+root.iconbitmap(path + "logo.ico")
 root.title('Import Window')
 root.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
+root.state("zoomed")
 
 ## Structure
 frame = Frame(root)
 frame.pack(expand=YES)
 
-text = Label(frame, text='Upload files (.png)')
-text.pack()
-
-button1 = Button(frame, text='Choose files', command=chooseFiles)
+button1 = Button(frame, text='Choose files (.png)', command=chooseFiles)
 button1.pack()
 
 button2 = Button(root, text='Load files', command=lambda:[loadFiles(),predictFiles()])
