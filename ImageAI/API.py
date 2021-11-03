@@ -51,6 +51,7 @@ def nextImage(number_image):
     return label_image
 
 def openWindowTraining(model_file):
+    '''Open a window for the training of the model. In this window, we can choose to retrain the model with all the training images (i.e. preivous training images + new images chosed in chooseFiles). We can also choose to exit the program.'''
     bool = False
 
     newWindow = Toplevel(root)
@@ -67,7 +68,8 @@ def openWindowTraining(model_file):
     button_quit.pack(side=RIGHT, padx=100, pady=100)
 
 
-def openWindowPrediction(photo):
+def openWindowPrediction(preds, photo):
+    '''Open a window for prediction. Into this window, we have a picture with its initial prediction from the model. The user needs to confirm or deny this prediction by using the correct stage of barley growth in the scrolling menu. When it's done, press Valid.'''
     photo_path = path + "dataset/test/" + photo
 
     newWindow = Toplevel(root)
@@ -79,10 +81,17 @@ def openWindowPrediction(photo):
     frame_prediction.pack(side=LEFT)
 
     img = Image.open(photo_path)
-    tk_img = ImageTk.PhotoImage(img)
+    resized_img = img.resize((800,800), Image.ANTIALIAS)
+    tk_img = ImageTk.PhotoImage(resized_img)
     label_image = Label(frame_prediction, image=tk_img)
     label_image.image = tk_img
-    label_image.pack()
+    label_image.pack(expand=YES)
+
+    text_count = Label(frame_prediction, text='Image n°{}/{}'.format(list(preds.keys()).index(photo)+1,len(preds)))
+    text_count.pack(expand=YES)
+
+    text_pred = Label(newWindow, text="Initial prediction : {}".format(preds[photo][0][0]) + " with {0:.2f}% level of confidence".format(float(preds[photo][1][0])))
+    text_pred.pack(expand=YES)
 
     OptionList = ["Levee","Tallage","Epi","Moisson"]
     variable = StringVar(newWindow)
@@ -120,7 +129,7 @@ def predictFiles():
     test_path = path + "dataset/test/"
     preds = testModelFunction(model_type=model_type, folder_path=test_path, model_path=os.path.abspath(model_file))
     for photo in preds.keys():
-        openWindowPrediction(photo)
+        openWindowPrediction(preds, photo)
 
     #Les images sont maintenant dans leurs folders respectifs dans train. On va maintenant créer une nouvelle fenêtre pour pouvoir entraîner le modèle sur toutes les données présentes dans le train
 
