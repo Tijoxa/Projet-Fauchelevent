@@ -330,7 +330,7 @@ class ClassificationModelTrainer:
         if (show_network_summary == True):
             model.summary()
 
-        model_name = 'model - epoch {epoch:03d} - val_acc {val_accuracy:03f}.h5'
+        model_name = 'model_{}'.format(self.__modelType) + '-epoch_{epoch:03d}.h5'
 
         log_name = '{}_lr-{}_{}'.format(self.__modelType, initial_learning_rate, time.strftime("%Y-%m-%d-%H-%M-%S"))
 
