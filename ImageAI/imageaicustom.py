@@ -345,7 +345,6 @@ class ClassificationModelTrainer:
 
         model_path = os.path.join(self.__trained_model_dir, model_name)
 
-
         logs_path = os.path.join(self.__logs_dir, log_name)
         
         if not os.path.isdir(logs_path):
