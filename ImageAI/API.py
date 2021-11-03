@@ -11,7 +11,7 @@ path = "C:/Users/geyma/Documents/Centrale Digital Lab/Projet Metigate - Fauchele
 os.chdir(path)
 
 import shutil
-from main3 import trainModelFunction, testModelFunction
+from core import trainModelFunction, testModelFunction
 
 ## Variables globales
 WINDOW_WIDTH = 1280
