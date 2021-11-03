@@ -3,21 +3,22 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 import time
 import os
-from PIL import Image, ImageTk
-import keyboard
 
 # Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/geyma/Documents/Centrale Digital Lab/Projet Metigate - Fauchelevent/API/"
+path = "C:/Users/DL/Documents/code/GitHub/projet_test/ImageAI/"
 os.chdir(path)
 
+from PIL import Image, ImageTk
+import keyboard
 import shutil
-from core import trainModelFunction, testModelFunction
+###
+from core import trainModelFunction, testModelFunction, readJson, getModelType
 
 ## Variables globales
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 files = []
-model_type="mobilenetv2"
+model_type = getModelType() ###
 dataset_path = path + "dataset/"
 
 ## Command functions
@@ -34,8 +35,11 @@ def loadFiles():
     '''Store the selected images into the test folder in the dataset folder'''
     test_path = path + "dataset/test/"
     for file in files :
-        shutil.move(file,test_path)
-    text = Label(frame, text='Upload successful !')
+        try :
+            shutil.move(file,test_path)
+        except :
+            pass
+    text = Label(frame, text='Files successfully loaded!') ###
     text.pack()
 
 def nextImage(number_image):
@@ -84,7 +88,9 @@ def openWindowPrediction(photo):
     label_image.image = tk_img
     label_image.pack()
 
-    OptionList = ["Levee","Tallage","Epi","Moisson"]
+    OptionDict = readJson()   ###
+    OptionList = [value for key, value in OptionDict.items()]
+
     variable = StringVar(newWindow)
     variable.set(OptionList[0]) #Changer pour qu'il donne la valeur de la prédiction de l'algo
     opt = OptionMenu(newWindow, variable, *OptionList)
@@ -187,14 +193,16 @@ def predictFiles():
 
 ## Root custom window
 root = Tk()
+root.iconbitmap(path + "logo.ico") ###
 root.title('Import Window')
 root.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
+root.state("zoomed")  ###
 
 ## Structure
 frame = Frame(root)
 frame.pack(expand=YES)
 
-text = Label(frame, text='Upload files (.png)')
+text = Label(frame, text='(.png)')
 text.pack()
 
 button1 = Button(frame, text='Choose files', command=chooseFiles)
