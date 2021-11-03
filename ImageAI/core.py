@@ -1,15 +1,15 @@
 import os
 
 # Current path for the API needs to be updated if the script is run on another device
-def getPath():
-    return "C:/Users/Tijoxa/Desktop/code/ImageAI/"
-path = getPath()
+path = "C:/Users/geyma/Documents/Centrale Digital Lab/Projet Metigate - Fauchelevent/API/"
 os.chdir(path)
 
 import sys
 sys.path.append(path)
 
 import json
+from random import sample
+import shutil
 
 model = "mobilenetv2"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
 test_subdirectory = path + "dataset/validation"
@@ -42,7 +42,36 @@ class_weight_custom = normalizeClassWeights(train_subdirectory + "/")
 ## Train
 from imageaicustom import ClassificationModelTrainer
 
-def trainModelFunction(model, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 50):
+def createValidationFolders():
+    try :
+        os.mkdir(path + "dataset/validation")
+    except :
+        pass
+
+    L = os.listdir(path + "dataset/train")
+
+    for label_name in L:
+        try :
+            os.mkdir(path + "dataset/validation/" + label_name)
+        except :
+            pass
+
+        pourc = int(0.2*len(os.listdir(path + "dataset/train/" + label_name)))
+        files = sample(os.listdir(path + "dataset/train/" + label_name), pourc)
+
+        for file in files :
+            shutil.move(path + "dataset/train/" + label_name + "/" + file, path + "dataset/validation/" + label_name)
+
+def removeValidationFolders():
+    L = os.listdir(path + "dataset/validation")
+
+    for label_name in L:
+        for file in os.listdir(path + "dataset/validation/" + label_name):
+            shutil.move(path + "dataset/validation/" + label_name + "/" + file, path + "dataset/train/" + label_name)
+
+    shutil.rmtree(path + "dataset/validation/")
+
+def trainModelFunction(model, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 50, continue_from_model = None):
 
     dirdict = readJson()
 
@@ -57,13 +86,18 @@ def trainModelFunction(model, dataset_directory = path + "dataset", json_subdire
     elif (model == "efficientnetb7"):
         model_trainer.setModelTypeAsEfficientNetB7()
 
-    model_trainer.setDataDirectory(dataset_directory, json_subdirectory = json_subdirectory, test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
-    model_trainer.trainModel(num_objects = len(dirdict), num_experiments = num_experiments, enhance_data = True, batch_size = 4, training_image_size = 1024, class_weight_custom = class_weight_custom)
+    createValidationFolders()
+
+    model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
+    model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=4, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
+
+    removeValidationFolders()
 
 # trainModelFunction(test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
 
 ## Test
 from imageaicustom import CustomImageClassification
+
 
 def testModelFunction(model_type, folder_path, model_path):
 
@@ -91,6 +125,7 @@ def testModelFunction(model_type, folder_path, model_path):
 
 # print(testModelFunction("mobilenetv2"))
 
+'''
 ## Confusion matrix
 from tensorflow.math import confusion_matrix
 
@@ -115,4 +150,5 @@ def confusionMatrix(test_subdirectory):
 
     print(confusion_matrix(y_true, y_test), y_test)
 
-# confusionMatrix(test_subdirectory = test_subdirectory)
+confusionMatrix()
+'''
