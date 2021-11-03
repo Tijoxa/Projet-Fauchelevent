@@ -59,7 +59,7 @@ def openWindowTraining(model_file):
 
     newWindow = Toplevel(root)
     newWindow.title('Training Window')
-    newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
+    newWindow.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
 
     def switch():
         trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments=1, continue_from_model = model_file)
