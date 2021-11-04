@@ -12,7 +12,7 @@ dataset
 
 Requirements :
 <pre>
-Python 3.7.6
+Python 3.7.6 (with tkinter Tcl/Tk)
 pip
 pip install tensorflow==2.4.0
 pip install tensorflow-gpu==2.4.0
