@@ -1,22 +1,24 @@
 import os
 
 # Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/DL/Documents/code/GitHub/projet_test/ImageAI/"
+path = "C:/Users/DL/Documents/Projet-Fauchelevent-Purjack-patch-1/ImageAI/"
 os.chdir(path)
 
 import sys
 sys.path.append(path)
+
 import json
 from random import sample
 import shutil
 
-model = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7 (/ inceptionv3)
-test_subdirectory = path + "dataset/validation"
-train_subdirectory = path + "dataset/train"
+model = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
 
-## Utility
 def getModelType():
     return model
+
+
+test_subdirectory = path + "dataset/validation"
+train_subdirectory = path + "dataset/train"
 
 def readJson():
     with open(os.path.join(path, "model_class.json"), "r") as json_file:
@@ -89,10 +91,8 @@ def trainModelFunction(model, dataset_directory = path + "dataset", json_subdire
     elif (model == "efficientnetb7"):
         model_trainer.setModelTypeAsEfficientNetB7()
 
-    createValidationFolders()
-
-    model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory=path + "dataset/validation", train_subdirectory=path + "dataset/train")
-    model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=1, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
+    model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
+    model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=4, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
 
     removeValidationFolders()
 
@@ -122,8 +122,8 @@ def testModelFunction(model_type, folder_path, model_path):
 
     preds={}
     for file in os.listdir(folder_path):
-        file_path = folder_path + file
-        preds[file] = prediction.classifyImage(file_path, result_count=1)
+        file_path = folder_path+file
+        preds[file]=prediction.classifyImage(file_path, result_count=1)
     return preds
 
 # print(testModelFunction("mobilenetv2"))
