@@ -11,7 +11,7 @@ import json
 from random import sample
 import shutil
 
-model = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
+model = "mobilenetv2"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
 
 def getModelType():
     return model
@@ -103,7 +103,6 @@ from imageaicustom import CustomImageClassification
 
 
 def testModelFunction(model_type, folder_path, model_path):
-
     dirdict = readJson()
     prediction = CustomImageClassification()
 
