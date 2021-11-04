@@ -17,11 +17,10 @@ from core import trainModelFunction, testModelFunction, getModelType, readJson, 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 files = []
-model_type=getModelType()
+model_type = getModelType()
 dataset_path = path + "dataset/"
 
 ## Command functions
-
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
     FILETYPES = [("Images PNG",".png"),("Images JPG",".jpg")]
@@ -58,14 +57,18 @@ def loadFiles():
 
 def openWindowTraining(model_file):
     '''Open a window for the training of the model. In this window, we can choose to retrain the model with all the training images (i.e. preivous training images + new images chosed in chooseFiles). We can also choose to exit the program.'''
-    num_experiments = 200
+    num_experiments = 200  # number of epochs is set as 200 by default
     newWindow = Toplevel(root)
     newWindow.title('Training Window')
     newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
     newWindow.state("zoomed")
+    try :
+        newWindow.iconbitmap(path + "logo.ico")
+    except :
+        pass
 
-    def switch():
-        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments=num_experiments, continue_from_model = model_file)
+    def switch():  # continue_from_model = None to start from blank model, otherwise put continue_from_model = model_file
+        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = num_experiments, continue_from_model = None)
 
     def split():
         createValidationFolders()
@@ -98,7 +101,7 @@ def openWindowPrediction(preds):
     label_image.image = tk_img
     label_image.pack(expand=YES)
 
-    text_count = Label(frame_prediction, text='Image n°{}/{}'.format(list(preds.keys()).index(os.listdir(path + "dataset/test/")[0])+1,len(preds)))
+    text_count = Label(frame_prediction, text='Image n°{}/{}'.format(list(preds.keys()).index(os.listdir(path + "dataset/test/")[0])+1, len(preds)))
     text_count.pack(expand=YES)
 
     text_pred = Label(newWindow, text="Initial prediction : {}".format(preds[os.listdir(path + "dataset/test/")[0]][0][0]) + " with {0:.2f}% level of confidence".format(float(preds[os.listdir(path + "dataset/test/")[0]][1][0])))
@@ -156,7 +159,7 @@ root.state("zoomed")
 frame = Frame(root)
 frame.pack(expand=YES)
 
-text = Label(frame, text='format .png')
+text = Label(frame, text='format .png')  # only png?
 text.pack()
 
 button1 = Button(frame, text='Choose files', command=chooseFiles)
