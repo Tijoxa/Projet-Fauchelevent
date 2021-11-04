@@ -25,7 +25,7 @@ dataset_path = path + "dataset/"
 ## Command functions
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
-    FILETYPES = [("Images PNG",".png"),("Images JPG",".jpg")]
+    FILETYPES = [("Images PNG", ".png"),("Images JPG", ".jpg")]
     files_path = askopenfilename(title = "Select a file ...", filetypes=FILETYPES)
     files.append(files_path)
     text = Label(frame, text=os.path.basename(files_path))
@@ -58,13 +58,14 @@ def openWindowTraining(model_file):
     bool = False
 
     newWindow = Toplevel(root)
+    newWindow.iconbitmap(path + "logo.ico")
     newWindow.title('Training Window')
-    newWindow.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
+    newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
 
     def switch():
-        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments=1, continue_from_model = model_file)
+        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 200, continue_from_model = model_file)
 
-    button_train = Button(newWindow, text='Retrain the model with all training data', command=switch)
+    button_train = Button(newWindow, text='Train model', command=switch)
     button_train.pack(side=LEFT, padx=100, pady=100)
 
     button_quit = Button(newWindow, text='Exit', command=lambda:[root.destroy()])
@@ -75,6 +76,7 @@ def openWindowPrediction(photo):
     photo_path = path + "dataset/test/" + photo
 
     newWindow = Toplevel(root)
+    newWindow.iconbitmap(path + "logo.ico")
     newWindow.title('Predict Window')
     newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
 
@@ -194,8 +196,8 @@ def predictFiles():
 root = Tk()
 root.iconbitmap(path + "logo.ico")
 root.title('Import Window')
-root.geometry('{}x{}'.format(WINDOW_WIDTH,WINDOW_HEIGHT))
-root.state("zoomed")
+root.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
+# root.state("zoomed")
 
 ## Structure
 frame = Frame(root)
@@ -204,11 +206,11 @@ frame.pack(expand=YES)
 button1 = Button(frame, text='Choose files (.png)', command=chooseFiles)
 button1.pack()
 
-button2 = Button(root, text='Load files', command=lambda:[loadFiles(),predictFiles()])
+button2 = Button(root, text='Load files', command=lambda:[loadFiles(), predictFiles()])
 button2.pack(expand=YES)
 
 """
-button3 = Button(root, text='Predict', command=lambda:[predict_images,openWindow])
+button3 = Button(root, text='Predict', command=lambda:[predict_images, openWindow])
 button3.pack(expand=YES)
 
 
