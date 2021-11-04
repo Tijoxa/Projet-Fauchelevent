@@ -11,11 +11,10 @@ import json
 from random import sample
 import shutil
 
-model = "mobilenetv2"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
+model = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
 
 def getModelType():
     return model
-
 
 test_subdirectory = path + "dataset/validation"
 train_subdirectory = path + "dataset/train"
@@ -76,7 +75,7 @@ def removeValidationFolders():
 
     shutil.rmtree(path + "dataset/validation/")
 
-def trainModelFunction(model, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 50, continue_from_model = None):
+def trainModelFunction(model, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 200, continue_from_model = None):
 
     dirdict = readJson()
 
@@ -92,7 +91,9 @@ def trainModelFunction(model, dataset_directory = path + "dataset", json_subdire
         model_trainer.setModelTypeAsEfficientNetB7()
 
     model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
-    model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=4, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
+
+    # batch_size = 1 for heavier models (resnet50, dense121)
+    model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=1, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
 
     removeValidationFolders()
 
@@ -127,30 +128,45 @@ def testModelFunction(model_type, folder_path, model_path):
 
 # print(testModelFunction("mobilenetv2"))
 
-'''
+
 ## Confusion matrix
 from tensorflow.math import confusion_matrix
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 
-def confusionMatrix(test_subdirectory):
+# model_file = path + 'model - epoch 100 - val_acc 0.636637.h5'  # put the path to the model that will be tested on the validation data
 
+def confusionMatrix(model_file):  # returns nothing, but shows the diagram
     dirdict = readJson()
 
     y_true = []
-    y_test=[]
+    y_test = []
+    predslist = []
 
     for i in range(len(dirdict)):
         folder_name = test_subdirectory + "/" + dirdict['{}'.format(i)] +"/"
         y_true += [i for j in range(len([name for name in os.listdir(folder_name)]))]
-        name_list = [item for item in os.listdir(folder_name)]
 
-        for file_name in name_list:
-            preds = testModelFunction(file_path = folder_name + file_name)
-            predictions, probabilities = preds[file_name]
-            for i in range(len(dirdict)):
-                if (predictions[0] == dirdict['{}'.format(i)]):
-                    y_test += [i]
+        preds = testModelFunction(model_type=model_type, folder_path=folder_name, model_path=os.path.abspath(model_file))
+        predslist += [value for key, value in preds.items()]
 
-    print(confusion_matrix(y_true, y_test), y_test)
+    for j in range(len(predslist)):
+        for i in range(len(dirdict)):
+            if (predslist[j][0][0] == dirdict['{}'.format(i)]):
+                y_test += [i]
 
-confusionMatrix()
-'''
+    cm = confusion_matrix(y_true, y_test)
+
+    f, ax = plt.subplots(figsize=(5, 5))
+    sns.heatmap(a, annot = True, linewidths=0.5, linecolor='red', fmt=".0f", ax=ax)
+    plt.xlabel("pred")
+    plt.ylabel("validation")
+    plt.show()
+
+# confusionMatrix(model_file)
+
+"""
+pour Maxime :
+le script à part marche lorsque je lance API, puis que je fais load file, puis que j'exit, puis que je run core.py, puis que je run ce bout de code
+"""
