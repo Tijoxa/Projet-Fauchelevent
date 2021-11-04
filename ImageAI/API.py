@@ -3,29 +3,28 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 import time
 import os
-
-# Current path for the API needs to be updated if the script is run on another device
-path = "C:/Users/DL/Documents/code/GitHub/projet_test/ImageAI/"
-os.chdir(path)
-
 from PIL import Image, ImageTk
 import keyboard
-import shutil
 
-###
-from core import trainModelFunction, testModelFunction, readJson, getModelType
+# Current path for the API needs to be updated if the script is run on another device
+path = "C:/Users/DL/Documents/Projet-Fauchelevent-Purjack-patch-1/ImageAI/"
+os.chdir(path)
+
+import shutil
+from core import trainModelFunction, testModelFunction, getModelType, readJson, createValidationFolders
 
 ## Variables globales
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 files = []
-model_type = getModelType()
+model_type=getModelType()
 dataset_path = path + "dataset/"
 
 ## Command functions
+
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
-    FILETYPES = [("Images PNG", ".png"),("Images JPG", ".jpg")]
+    FILETYPES = [("Images PNG",".png"),("Images JPG",".jpg")]
     files_path = askopenfilename(title = "Select a file ...", filetypes=FILETYPES)
     files.append(files_path)
     text = Label(frame, text=os.path.basename(files_path))
@@ -35,10 +34,7 @@ def loadFiles():
     '''Store the selected images into the test folder in the dataset folder'''
     test_path = path + "dataset/test/"
     for file in files :
-        try :
-            shutil.move(file,test_path)
-        except :
-            pass
+        shutil.move(file,test_path)
     text = Label(frame, text='Files successfully loaded!')
     text.pack()
 
@@ -56,68 +52,73 @@ def nextImage(number_image):
 
 def openWindowTraining(model_file):
     '''Open a window for the training of the model. In this window, we can choose to retrain the model with all the training images (i.e. preivous training images + new images chosed in chooseFiles). We can also choose to exit the program.'''
-    bool = False
-
+    num_experiments = 200
     newWindow = Toplevel(root)
-    newWindow.iconbitmap(path + "logo.ico")
     newWindow.title('Training Window')
     newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
+    newWindow.state("zoomed")
 
     def switch():
-        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 200, continue_from_model = model_file)
+        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments=num_experiments, continue_from_model = model_file)
 
-    button_train = Button(newWindow, text='Train model', command=switch)
-    button_train.pack(side=LEFT, padx=100, pady=100)
+    def split():
+        createValidationFolders()
+
+    button_split = Button(newWindow, text='Split data into train (80%) and validation (20%)', command=split)
+    button_split.pack(side=LEFT, padx=100, pady=100)
+
+    button_split = Button(newWindow, text='Train the model with {} for {} epochs'.format(getModelType(), num_experiments), command=switch)
+    button_split.pack(side=LEFT, padx=100, pady=150)
 
     button_quit = Button(newWindow, text='Exit', command=lambda:[root.destroy()])
     button_quit.pack(side=RIGHT, padx=100, pady=100)
 
 
-def openWindowPrediction(preds, photo):
+def openWindowPrediction(preds):
     '''Open a window for prediction. Into this window, we have a picture with its initial prediction from the model. The user needs to confirm or deny this prediction by using the correct stage of barley growth in the scrolling menu. When it's done, press Valid.'''
-    photo_path = path + "dataset/test/" + photo
 
     newWindow = Toplevel(root)
-    newWindow.iconbitmap(path + "logo.ico")
     newWindow.title('Predict Window')
-    newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
+    newWindow.geometry('1920x1010')
+    newWindow.state("zoomed")
 
     frame_prediction = Frame(newWindow)
     frame_prediction.pack(side=LEFT)
 
-    img = Image.open(photo_path)
-    resized_img = img.resize((800,800), Image.ANTIALIAS)
+    img = Image.open(path + "dataset/test/" + os.listdir(path + "dataset/test/")[0])
+    resized_img = img.resize((800, 800), Image.ANTIALIAS)
     tk_img = ImageTk.PhotoImage(resized_img)
     label_image = Label(frame_prediction, image=tk_img)
     label_image.image = tk_img
     label_image.pack(expand=YES)
 
-    text_count = Label(frame_prediction, text='Image n°{}/{}'.format(list(preds.keys()).index(photo)+1,len(preds)))
+    text_count = Label(frame_prediction, text='Image n°{}/{}'.format(list(preds.keys()).index(os.listdir(path + "dataset/test/")[0])+1,len(preds)))
     text_count.pack(expand=YES)
 
-    text_pred = Label(newWindow, text="Initial prediction : {}".format(preds[photo][0][0]) + " with {0:.2f}% level of confidence".format(float(preds[photo][1][0])))
+    text_pred = Label(newWindow, text="Initial prediction : {}".format(preds[os.listdir(path + "dataset/test/")[0]][0][0]) + " with {0:.2f}% level of confidence".format(float(preds[os.listdir(path + "dataset/test/")[0]][1][0])))
     text_pred.pack(expand=YES)
 
     OptionDict = readJson()
     OptionList = [value for key, value in OptionDict.items()]
 
     variable = StringVar(newWindow)
-    variable.set(OptionList[0])  # Changer pour qu'il donne la valeur de la prédiction de l'algo
+    variable.set(OptionList[0])
     opt = OptionMenu(newWindow, variable, *OptionList)
     opt.pack(expand=YES)
 
-    def user_valid(photo):
+    def user_valid():
         '''When the barley growth stage is given by the user, we move the picture into the train>"barley growth stage" folder. For example : if the stage is "Levee", we move the picture from the test folder into train>Levee.'''
-        img_path = path + "dataset/test/" + photo
         validation = variable.get()
         train_path = path + "dataset/train/" + validation
-        shutil.move(img_path,train_path)
+        shutil.move(path + "dataset/test/" + os.listdir(path + "dataset/test/")[0],train_path)
 
-    valid_button = Button(newWindow, text='Valid', command=lambda:[user_valid(photo), newWindow.destroy()])
+    valid_button = Button(newWindow, text='Valid', command=lambda:[user_valid(), newWindow.destroy()])
     valid_button.pack(expand=YES)
 
-def user_not_valid():
-    ''''''
+    quit_button = Button(newWindow, text = 'Exit', command=root.destroy)
+    quit_button.pack(expand=YES)
+
+    return(newWindow)
 
 def displayImage(image, window):
     '''Display an image on the left side of a window'''
@@ -135,8 +136,9 @@ def predictFiles():
             model_file = file
     test_path = path + "dataset/test/"
     preds = testModelFunction(model_type=model_type, folder_path=test_path, model_path=os.path.abspath(model_file))
-    for photo in preds.keys():
-        openWindowPrediction(preds, photo)
+    while len(os.listdir(path + "dataset/test/")):
+        newWindow = openWindowPrediction(preds)
+        newWindow.wait_window()
 
     # Les images sont maintenant dans leurs folders respectifs dans train. On va maintenant créer une nouvelle fenêtre pour pouvoir entraîner le modèle sur toutes les données présentes dans le train
 
@@ -186,7 +188,7 @@ def predictFiles():
         logo1 = dessin.create_image(0,0, anchor = tk.NW, image = logo)
         dessin.grid()
 
-    #On demande à l'utilisateur de vérifier les prédictions
+    # On demande à l'utilisateur de vérifier les prédictions
     for label_img in preds.keys():
         text = Label(root, text=label_img)
         text.pack()
@@ -196,30 +198,36 @@ def predictFiles():
         button4.pack()
         button5 = Button(root, text='Not Valid')
         button5.pack()
-    #On stocke le modèle que l'on vient d'utiliser dans les archives
+    # On stocke le modèle que l'on vient d'utiliser dans les archives
     shutil.move(model_file, 'model_archives')
     """
 
 
 ## Root custom window
 root = Tk()
-root.iconbitmap(path + "logo.ico")
+try :
+    root.iconbitmap(path + "logo.ico")
+except :
+    pass
 root.title('Import Window')
 root.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
-# root.state("zoomed")
+root.state("zoomed")
 
 ## Structure
 frame = Frame(root)
 frame.pack(expand=YES)
 
-button1 = Button(frame, text='Choose files (.png)', command=chooseFiles)
+text = Label(frame, text='format .png')
+text.pack()
+
+button1 = Button(frame, text='Choose files', command=chooseFiles)
 button1.pack()
 
-button2 = Button(root, text='Load files', command=lambda:[loadFiles(), predictFiles()])
+button2 = Button(root, text='Load files', command=lambda:[loadFiles(), predictFiles(), root.iconify()])
 button2.pack(expand=YES)
 
 """
-button3 = Button(root, text='Predict', command=lambda:[predict_images, openWindow])
+button3 = Button(root, text='Predict', command=lambda:[predict_images,openWindow])
 button3.pack(expand=YES)
 
 
