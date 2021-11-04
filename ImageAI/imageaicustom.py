@@ -369,6 +369,7 @@ class ClassificationModelTrainer:
             height_shift = 0.1
             width_shift = 0.1
 
+        # enhance_data provides those data augmentations:
         train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1. / 255,
             horizontal_flip=enhance_data,
@@ -404,7 +405,8 @@ class ClassificationModelTrainer:
         num_test = len(test_generator.filenames)
         print("Number of experiments (Epochs) : ", self.__num_epochs)
         
-        model.fit_generator(train_generator,
+        # model.fit or model.fit_generator is basically the same thing
+        model.fit(train_generator,
                             steps_per_epoch=int(num_train / batch_size),
                             epochs=self.__num_epochs,
                             validation_data=test_generator,
@@ -412,7 +414,7 @@ class ClassificationModelTrainer:
                             callbacks=[checkpoint, lr_scheduler, tensorboard, earlystopping],
                             class_weight=class_weight_custom,
                             max_queue_size=1,
-                            verbose=0)  # max_queue_size can be changed if enough memory
+                            verbose=1)  # max_queue_size can be changed if enough memory
 
 class CustomImageClassification:
     """
