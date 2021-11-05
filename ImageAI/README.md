@@ -47,7 +47,7 @@ On trouve d'abord la bibliothèque d'imports :
 - le module shutil offre un certain nombre d'opérations de haut niveau sur les fichiers et les collections de fichiers
 - on appelle les fonctions trainModelFunction, testModelFunction, getModelType, readJson, confusionMatrix du script core.py
 
-Le path est le dossier courant dans lequel se situe l'ensemble du dossier ImageAI. Il doit donc se terminer par ImageAI. Pour faire tourner l'API chez soi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>, faute de quoi l'algorithme ne trouvera pas vos fichiers.
+Le path est le dossier courant dans lequel se situe l'ensemble du dossier ImageAI. Il doit donc se terminer par ".../ImageAI/". Pour faire tourner l'API chez soi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>, faute de quoi l'algorithme ne trouvera pas vos fichiers.
 
 On définit par la suite des variables globales que l'on pourra appeler n'importe où dans le script. Elles servent au dimensionnement de fenêtres, au choix des images, à la définition du type de modèle utilisé parmi mobilenetv2, resnet50, densenet121 ou efficientnetb7. 
 
