@@ -8,7 +8,6 @@ import sys
 sys.path.append(path)
 
 import json
-from random import sample
 import shutil
 import time
 
@@ -47,52 +46,6 @@ class_weight_custom = normalizeClassWeights(train_subdirectory + "/")
 ## Train
 from imageaicustom import ClassificationModelTrainer
 
-def createValidationFolders():
-    try :
-        os.mkdir(path + "dataset/validation")
-    except :
-        pass
-
-    L = os.listdir(path + "dataset/train")
-
-    for label_name in L:
-        try :
-            os.mkdir(path + "dataset/validation/" + label_name)
-        except :
-            pass
-
-        pourc = int(0.2*len(os.listdir(path + "dataset/train/" + label_name)))
-        files = sample(os.listdir(path + "dataset/train/" + label_name), pourc)
-
-        for file in files :
-            shutil.move(path + "dataset/train/" + label_name + "/" + file, path + "dataset/validation/" + label_name)
-
-def removeValidationFolders():
-    L = os.listdir(path + "dataset/validation")
-
-    for label_name in L:
-        for file in os.listdir(path + "dataset/validation/" + label_name):
-            shutil.move(path + "dataset/validation/" + label_name + "/" + file, path + "dataset/train/" + label_name)
-
-    shutil.rmtree(path + "dataset/validation/")
-
-def moveToArchives():
-    try :
-        os.mkdir(path + "dataset/models_archives")
-    except :
-        pass
-
-    L = os.listdir(path + "dataset/models")
-    current_time = time.strftime("%Y-%m-%d-%H-%M-%S")
-
-    try :
-        os.mkdir(path + "dataset/models_archives/{}".format(current_time))
-    except :
-        pass
-
-    for file in os.listdir(path + "dataset/models"):
-        shutil.move(path + "dataset/models/" + file, path + "dataset/models_archives/{}".format(current_time))
-
 def trainModelFunction(model_type, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 200, continue_from_model = None):
 
     dirdict = readJson()
@@ -108,16 +61,11 @@ def trainModelFunction(model_type, dataset_directory = path + "dataset", json_su
     elif (model_type == "efficientnetb7"):
         model_trainer.setModelTypeAsEfficientNetB7()
 
-    moveToArchives()
-
     model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
 
     # batch_size = 1 for heavier models (resnet50, dense121)
     model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=1, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
 
-    # removeValidationFolders()
-
-# trainModelFunction(test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
 
 ## Test
 from imageaicustom import CustomImageClassification
@@ -179,14 +127,7 @@ def confusionMatrix(model_file):  # returns nothing, but shows the diagram
     cm = confusion_matrix(y_true, y_test)
 
     f, ax = plt.subplots(figsize=(5, 5))
-    sns.heatmap(a, annot = True, linewidths=0.5, linecolor='red', fmt=".0f", ax=ax)
+    sns.heatmap(cm, annot = True, linewidths=0.5, linecolor='red', fmt=".0f", ax=ax)
     plt.xlabel("pred")
     plt.ylabel("validation")
     plt.show()
-
-# confusionMatrix(model_file)
-
-"""
-pour Maxime :
-le script à part marche lorsque je lance API, puis que je fais load file, puis que j'exit, puis que je run core.py, puis que je run ce bout de code
-"""
