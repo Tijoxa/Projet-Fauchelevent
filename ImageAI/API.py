@@ -3,15 +3,17 @@ from tkinter import *
 from tkinter.filedialog import askopenfilenames
 import time
 import os
+import glob
 from PIL import Image, ImageTk
 import keyboard
+from random import sample
 
 # Current path for the API needs to be updated if the script is run on another device
 path = "C:/Users/DL/Documents/Projet-Fauchelevent-Purjack-patch-1/ImageAI/"
 os.chdir(path)
 
 import shutil
-from core import trainModelFunction, testModelFunction, getModelType, readJson, createValidationFolders, removeValidationFolders
+from core import trainModelFunction, testModelFunction, getModelType, readJson, confusionMatrix
 
 ## Global variables
 WINDOW_WIDTH = 1280
@@ -54,10 +56,37 @@ def loadFiles():
 
         newWindow.wait_window()
 
+def removeValidationFolders():
+    L = os.listdir(path + "dataset/validation")
+
+    for label_name in L:
+        for file in os.listdir(path + "dataset/validation/" + label_name):
+            shutil.move(path + "dataset/validation/" + label_name + "/" + file, path + "dataset/train/" + label_name)
+
+    shutil.rmtree(path + "dataset/validation/")
+
+
+def moveToArchives():
+    try :
+        os.mkdir(path + "dataset/models_archives")
+    except :
+        pass
+
+    L = os.listdir(path + "dataset/models")
+    current_time = time.strftime("%Y-%m-%d-%H-%M-%S")
+
+    try :
+        os.mkdir(path + "dataset/models_archives/{}".format(current_time))
+    except :
+        pass
+
+    for file in os.listdir(path + "dataset/models"):
+        shutil.move(path + "dataset/models/" + file, path + "dataset/models_archives/{}".format(current_time))
+
 
 def openWindowTraining(model_file):
     '''Open a window for the training of the model. In this window, we can choose to retrain the model with all the training images (i.e. preivous training images + new images chosed in chooseFiles). We can also choose to exit the program.'''
-    num_experiments = 50  # number of epochs is set as 200 by default
+    num_experiments = 1  # number of epochs is set as 200 by default
 
     if (num_experiments < 1):
         raise ValueError("The model must be train for at least 1 epoch")
@@ -71,19 +100,48 @@ def openWindowTraining(model_file):
     except :
         pass
 
+    cadre = Frame(newWindow)
+    cadre.pack(side=LEFT)
+
     def switch():  # continue_from_model = None to start from blank model, otherwise put continue_from_model = model_file
         trainModelFunction(model_type = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = num_experiments, continue_from_model = model_file)
+        model_files = glob.glob(path + "dataset/models/*")
+        latest_model = max(model_files, key=os.path.getctime)
+        confusionMatrix(latest_model)
 
-    button_split = Button(newWindow, text='Split data into train (80%) and validation (20%)', command=createValidationFolders)
+    def createValidationFolders():
+        try :
+            os.mkdir(path + "dataset/validation")
+        except :
+            raise ValueError("Validation folder already exists. Please merge this validation folder into the train folder.")
+
+        L = os.listdir(path + "dataset/train")
+
+        for label_name in L:
+            try :
+                os.mkdir(path + "dataset/validation/" + label_name)
+            except :
+                pass
+
+            pourc = int(0.2*len(os.listdir(path + "dataset/train/" + label_name)))
+            files = sample(os.listdir(path + "dataset/train/" + label_name), pourc)
+
+            for file in files :
+                shutil.move(path + "dataset/train/" + label_name + "/" + file, path + "dataset/validation/" + label_name)
+
+        text = Label(cadre, text='Done !')
+        text.pack()
+
+    button_split = Button(cadre, text='Split data into train (80%) and validation (20%)', command=createValidationFolders)
+    button_split.pack(padx=100, pady=100)
+
+    if (num_experiments == 1):
+        button_split = Button(newWindow, text='Train the {} model for {} epoch'.format(getModelType(), num_experiments), command=lambda:[moveToArchives(), switch()])
+    else:
+        button_split = Button(newWindow, text='Train the {} model for {} epochs'.format(getModelType(), num_experiments), command=lambda:[moveToArchives(), switch()])
     button_split.pack(side=LEFT, padx=100, pady=100)
 
     button_split = Button(newWindow, text='Merge validation folder into train folder', command=removeValidationFolders)
-    button_split.pack(side=LEFT, padx=100, pady=100)
-
-    if (num_experiments == 1):
-        button_split = Button(newWindow, text='Train the {} model for {} epoch'.format(getModelType(), num_experiments), command=switch)
-    else:
-        button_split = Button(newWindow, text='Train the {} model for {} epochs'.format(getModelType(), num_experiments), command=switch)
     button_split.pack(side=LEFT, padx=100, pady=100)
 
     button_quit = Button(newWindow, text='Exit', command=lambda:[root.destroy()])
