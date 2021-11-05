@@ -10,11 +10,12 @@ sys.path.append(path)
 import json
 from random import sample
 import shutil
+import time
 
-model = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
+model_type = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
 
 def getModelType():
-    return model
+    return model_type
 
 test_subdirectory = path + "dataset/validation"
 train_subdirectory = path + "dataset/train"
@@ -75,27 +76,46 @@ def removeValidationFolders():
 
     shutil.rmtree(path + "dataset/validation/")
 
-def trainModelFunction(model, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 200, continue_from_model = None):
+def moveToArchives():
+    try :
+        os.mkdir(path + "dataset/models_archives")
+    except :
+        pass
+
+    L = os.listdir(path + "dataset/models")
+    current_time = time.strftime("%Y-%m-%d-%H-%M-%S")
+
+    try :
+        os.mkdir(path + "dataset/models_archives/{}".format(current_time))
+    except :
+        pass
+
+    for file in os.listdir(path + "dataset/models"):
+        shutil.move(path + "dataset/models/" + file, path + "dataset/models_archives/{}".format(current_time))
+
+def trainModelFunction(model_type, dataset_directory = path + "dataset", json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = 200, continue_from_model = None):
 
     dirdict = readJson()
 
     model_trainer = ClassificationModelTrainer()
 
-    if (model == "mobilenetv2"):
+    if (model_type == "mobilenetv2"):
         model_trainer.setModelTypeAsMobileNetV2()
-    elif (model == "densenet121"):
+    elif (model_type == "densenet121"):
         model_trainer.setModelTypeAsDenseNet121()
-    elif (model == "resnet50"):
+    elif (model_type == "resnet50"):
         model_trainer.setModelTypeAsResNet50()
-    elif (model == "efficientnetb7"):
+    elif (model_type == "efficientnetb7"):
         model_trainer.setModelTypeAsEfficientNetB7()
+
+    moveToArchives()
 
     model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
 
     # batch_size = 1 for heavier models (resnet50, dense121)
     model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=1, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
 
-    removeValidationFolders()
+    # removeValidationFolders()
 
 # trainModelFunction(test_subdirectory = test_subdirectory, train_subdirectory = train_subdirectory)
 
