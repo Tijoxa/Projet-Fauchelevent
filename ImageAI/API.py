@@ -11,7 +11,7 @@ path = "C:/Users/DL/Documents/Projet-Fauchelevent-Purjack-patch-1/ImageAI/"
 os.chdir(path)
 
 import shutil
-from core import trainModelFunction, testModelFunction, getModelType, readJson, createValidationFolders
+from core import trainModelFunction, testModelFunction, getModelType, readJson, createValidationFolders, removeValidationFolders
 
 ## Global variables
 WINDOW_WIDTH = 1280
@@ -23,7 +23,7 @@ dataset_path = path + "dataset/"
 ## Command functions
 def chooseFiles():
     '''Open Windows Files Explorer and store the selected files into the list files'''
-    FILETYPES = [("Images PNG",".png"),("Images JPG",".jpg")]
+    FILETYPES = [("Images PNG",".png"), ("Images JPG",".jpg")]
     files_path = askopenfilenames(title = "Select a file ...", filetypes=FILETYPES)
     for i in range(len(files_path)):
         files.append(files_path[i])
@@ -57,7 +57,11 @@ def loadFiles():
 
 def openWindowTraining(model_file):
     '''Open a window for the training of the model. In this window, we can choose to retrain the model with all the training images (i.e. preivous training images + new images chosed in chooseFiles). We can also choose to exit the program.'''
-    num_experiments = 200  # number of epochs is set as 200 by default
+    num_experiments = 50  # number of epochs is set as 200 by default
+
+    if (num_experiments < 1):
+        raise ValueError("The model must be train for at least 1 epoch")
+
     newWindow = Toplevel(root)
     newWindow.title('Training Window')
     newWindow.geometry('{}x{}'.format(WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -68,16 +72,19 @@ def openWindowTraining(model_file):
         pass
 
     def switch():  # continue_from_model = None to start from blank model, otherwise put continue_from_model = model_file
-        trainModelFunction(model = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = num_experiments, continue_from_model = None)
+        trainModelFunction(model_type = model_type, dataset_directory = dataset_path, json_subdirectory = path, train_subdirectory = None, test_subdirectory = None, num_experiments = num_experiments, continue_from_model = model_file)
 
-    def split():
-        createValidationFolders()
-
-    button_split = Button(newWindow, text='Split data into train (80%) and validation (20%)', command=split)
+    button_split = Button(newWindow, text='Split data into train (80%) and validation (20%)', command=createValidationFolders)
     button_split.pack(side=LEFT, padx=100, pady=100)
 
-    button_split = Button(newWindow, text='Train the model with {} for {} epochs'.format(getModelType(), num_experiments), command=switch)
-    button_split.pack(side=LEFT, padx=100, pady=150)
+    button_split = Button(newWindow, text='Merge validation folder into train folder', command=removeValidationFolders)
+    button_split.pack(side=LEFT, padx=100, pady=100)
+
+    if (num_experiments == 1):
+        button_split = Button(newWindow, text='Train the {} model for {} epoch'.format(getModelType(), num_experiments), command=switch)
+    else:
+        button_split = Button(newWindow, text='Train the {} model for {} epochs'.format(getModelType(), num_experiments), command=switch)
+    button_split.pack(side=LEFT, padx=100, pady=100)
 
     button_quit = Button(newWindow, text='Exit', command=lambda:[root.destroy()])
     button_quit.pack(side=RIGHT, padx=100, pady=100)
@@ -90,6 +97,10 @@ def openWindowPrediction(preds):
     newWindow.title('Predict Window')
     newWindow.geometry('1920x1010')
     newWindow.state("zoomed")
+    try :
+        newWindow.iconbitmap(path + "logo.ico")
+    except :
+        pass
 
     frame_prediction = Frame(newWindow)
     frame_prediction.pack(side=LEFT)
@@ -159,7 +170,7 @@ root.state("zoomed")
 frame = Frame(root)
 frame.pack(expand=YES)
 
-text = Label(frame, text='format .png')  # only png?
+text = Label(frame, text='format .png or .jpg')
 text.pack()
 
 button1 = Button(frame, text='Choose files', command=chooseFiles)
