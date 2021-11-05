@@ -126,18 +126,18 @@ Une fois toutes les labellisations faites, les nouvelles images sont stockées d
 - Une fois l'entraînement complété, on remet les images ayant servies à la validation dans le dossier train
 - Puis on ferme le programme
 
-
-## Pour aller plus loin
-
-
-
-Before starting the API.py script:
+A la toute fin, on peut évaluer les performances de l'algorithme avec l'outil TensorBoard (outil de visualisation fournit par Tensorflow qu'utilise ImageAI). Pour ce faire, on ouvre un interface de commande. Ensuite, il faut se placer dans le dossier logs correspondant et ouvrir Tensorboard :
 <pre>
-change path
-customize num_experiments (optionnal)
-put labelled data into the train folder
-put the model (.h5) file into the ImageAI folder and change the model_type name in the core.py file according to the architecture of the .h5 file
+cd xxxxx\Projet-Fauchelevent\ImageAI\dataset\logs\xxxxx
+python -m tensorboard.main --logdir=.
 </pre>
+Cela renseigne l'URL localhost qu'il faut ouvrir sur Internet pour avoir le Tensorboard.
 
+## Pour aller plus loin (Pour l'équipe Fauchelevent notamment)
 
-downloads links supported until 2022/12/31 (YYYY/MM/DD)
+Pour aller plus loin, nous proposons de :
+- Utiliser la date de photographie (i.e. la date de pousse) comme paramètre d'entrée du modèle pour augmenter ses performances
+- Automatiser la prise de photos chez Sixmon
+- Incliner le plan de photo (30°) avec la pièce Onshape
+- Rendre l'API plus "user friendly"
+- Customiser la data augmentation (dans imageaicustom.py) avec plus d'attention
