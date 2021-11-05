@@ -86,7 +86,7 @@ def moveToArchives():
 
 def openWindowTraining(model_file):
     '''Open a window for the training of the model. In this window, we can choose to retrain the model with all the training images (i.e. preivous training images + new images chosed in chooseFiles). We can also choose to exit the program.'''
-    num_experiments = 1  # number of epochs is set as 200 by default
+    num_experiments = 100  # number of epochs is set as 200 by default in imageaicustom.py
 
     if (num_experiments < 1):
         raise ValueError("The model must be train for at least 1 epoch")
