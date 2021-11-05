@@ -1,14 +1,111 @@
+# ImageAI
+## Avertissement
+L'ensemble du README se veut le plus exhaustif possible. Nous avons écrit ce README de telle sorte que n'importe qu'elle personne puisse comprendre notre cheminement, les scripts python et comment modifier les scripts à sa guise pour faire tourner l'API chez soi. <b>Il est donc très important de tous lire !</b>
+## Introduction
+ImageAI est une bibliothèque Python de Computer Vision facile à utiliser qui permet aux développeurs d'intégrer facilement des fonctions d'intelligence artificielle de pointe dans leurs applications et systèmes nouveaux et existants. Elle est utilisée par des milliers de développeurs, étudiants, chercheurs, tuteurs et experts dans des entreprises du monde entier. 
+
+Nous avons choisi cette bibliothèque pour la simplicité qu'elle confère par rapport à d'autres outils. ImageAI se résume en peu de lignes de codes car elle utilise des fonctions de Tensorflow (bibliothèque beaucoup plus dense).
+
+## But du projet
+L'explication du projet Fauchelevent a déjà été expliqué dans le README général. Notre travail consiste à fournir un modèle permettant de prédire le stade d'évolution de l'orge en fonction à partir de photos prises par un robot Farmbot. Pour ce faire, nous avons utilisé le dataset Global Wheat Detection pour pré-entraîner plusieurs modèles à la détection de céréales. Le fait de pré-entraîner sur des images de blé ne pose pas vraiment de problème car le blé et l'orge pousse de façon presque identique. Le livrable final est une API permettant de prédire le stade d'évolution de nouvelles photos prises par le robot Farmbot grâce au modèle pré-entraîné sur Global Wheat Dataset. Elle permet également à l'utilisateur de vérifier ces prédictions et de les corriger si nécessaire. Une fois correctement labellisées, ces photos sont utilisées comme données d'entraînement. L'API permet donc de ré-entraîner le modèle avec l'ensemble des données (i.e. les anciennes photos + les nouvelles photos).
+
+Cette API a pour but de permettre à l'utilisateur de centraliser les tâches de prédiction, de labellisation et d'entraînement. A chaque ré-entraînement, le modèle s'ajuste pour prédire de mieux en mieux les stades d'évolution de l'orge.
+
+## Structure du dossier
+Le structure du dossier Image AI est la suivante :
 <pre>
-dataset
-> logs
-> models
-> test
-> train
-  > Epi
-  > Levee
-  > Moisson
-  > Tallage
+> ImageAI  
+  > dataset
+  > logs
+  > models
+  > test
+  > train
+    > Epi
+    > Levee
+    > Moisson
+    > Tallage
+  API.py
+  core.py
+  imageaicustom.py
+  logo.ico
+  model_class.json
+README.md
+requirements.txt
 </pre>
+
+### API
+Le script python principal se situe dans <u>API.py</u> : Lancer ce script permet de lancer l'API.
+
+On trouve d'abord la bibliothèque d'imports :
+- le module tkinter fournit des outils de création d'APIs (askopenfilenames permettant de sélectionner des fichiers dans l'explorateur de fichiers)
+- le module time fournit différentes fonctions liées au temps
+- le module os fournit une façon portable d'utiliser les fonctionnalités dépendantes du système d'exploitation
+- le module glob permet de rechercher des chemins de style Unix selon certains motifs
+- le module PIL (diminutif de Pillow) est une bibliothèque de traitement d'image
+- le module keyboard permet de contrôler les actions du clavier
+- le module random.sample est utilisé pour un échantillonage aléatoire
+- le module shutil offre un certain nombre d'opérations de haut niveau sur les fichiers et les collections de fichiers
+- on appelle les fonctions trainModelFunction, testModelFunction, getModelType, readJson, confusionMatrix du script core.py
+
+Le path est le dossier courant dans lequel se situe l'ensemble du dossier ImageAI. Il doit donc se terminer par ImageAI. Pour faire tourner l'API chez soi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>, faute de quoi l'algorithme ne trouvera pas vos fichiers.
+
+On définit par la suite des variables globales que l'on pourra appeler n'importe où dans le script. Elles servent au dimensionnement de fenêtres, au choix des images, à la définition du type de modèle utilisé parmi mobilenetv2, resnet50, densenet121 ou efficientnetb7. 
+
+Vient ensuite une liste de fonctions utilisées pour la plupart lorsque l'on appuie sur des boutons dans l'API. Nous ne nous attarderons pas sur l'explication de ces fonctions qui sont chacune déjà commentées dans le script API.py.
+
+Nous créons donc notre fenêtre principale que nous customisons avec des dimensions, un logo (logo.ico) et un titre. Puis, nous créons un cadre pour placer correctement des boutons et du texte. Le root.mainloop() est simplement une méthode dans la fenêtre principale qui exécute ce que nous souhaitons exécuter dans une application (permet à Tkinter de commencer à exécuter l'application). Comme son nom l'indique, elle bouclera indéfiniment jusqu'à ce que l'utilisateur quitte la fenêtre ou attende tout événement de la part de l'utilisateur.
+
+### Core
+
+Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion. Il est important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121 ou efficientnetb7.
+
+L'ensemble des fonctions utilisées dans core.py sont également commentées dans le script.
+
+### Imageaicustom
+
+Sur le site d'ImageAI (http://www.imageai.org/), on peut trouver le gitHub relatif à la bibliothèque en cliquant sur "GitHub Repository" (https://github.com/OlafenwaMoses/ImageAI). Là, il faut aller dans le dossier ImageAI > imageai > Classification > Custom pour trouver le script __init.py__. Imageaicustom n'est rien d'autre que ce script __init.py__ que nous avons un peu modifié pour faire marcher certaines de nos fonctions dans core.py ou dans API.py.
+
+Les fonctions sont également commentées dans ce script python.
+
+### model_class.json
+
+Ce fichier Json renseigne le nom des stades d'évolution de l'orge que nous voulons prédire. Il y en a 4 :
+- Stade 1 = "Levee"
+- Stade 2 = "Tallage"
+- Stade 3 = "Epi"
+- Stade 4 = "Moisson"
+
+Nous expliquerons un peu plus tard comment différencier ces stades de croissance pour labelliser correctement.
+
+### dataset
+
+Ce dossier contient l'ensemble des images qui seront utiles à l'algorithme, les modèles et des fichiers ouvrables dans TensorBoard pour visualiser la performance du modèle. En particulier : 
+- le dossier "train" contient l'ensemble des données d'entraînement
+- le dossier "test" est vide au début puis servira de dossier de stockage des nouvelles images avant leur prédiction par le modèle
+- le dossier "models" est un dossier de stockage du nouveau modèle après ré-entraînement de l'ancien modèle sur les anciennes et les nouvelles images. Ce dossier est vide au début
+- le dossier "models_archives" n'existe pas au début, il est créé lors du premier ré-entraînement de l'algorithme dans l'API. C'est un dossier de stockage des anciens modèles.
+- le dossier "logs" permet de stocker les dossiers logs de chaque occurence du ré-entraînement de l'algorithme. Dans ces dossiers logs, on retrouve notamment des fichiers V2 ouvrables sur TensorBoard.
+
+## Installations nécessaires
+
+On retrouve l'ensemble des installations nécessaire ci-dessous dans requirements.txt :
+
+<pre>
+Python 3.7.6 (with tkinter Tcl/Tk)
+pip
+pip install tensorflow==2.4.0
+pip install tensorflow-gpu==2.4.0
+pip install keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.4.1 h5py==2.10.0 matplotlib==3.3.2 opencv-python keras-resnet==0.2.0
+pip install keyboard
+pip install seaborn
+</pre>
+
+## Utilisation de l'API
+## Pour aller plus loin
+
+
+
+
 
 Requirements:
 <pre>
