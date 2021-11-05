@@ -26,5 +26,5 @@ Before starting the API.py script:
 change path
 customize num_experiments (optionnal)
 put labelled data into the train folder
-put the model (.h5) file into the ImageAI folder and change the model name in the core.py file according to the architecture of the .h5 file
+put the model (.h5) file into the ImageAI folder and change the model_type name in the core.py file according to the architecture of the .h5 file
 </pre>
