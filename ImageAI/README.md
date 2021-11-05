@@ -81,7 +81,7 @@ Dans le fichier Json, les stades d'évolution ne sont pas classés comme ci-dess
 - 3 : Moisson
 - 4 : Tallage
 
-<i>Note : Si l'utilisateur souhaite renommer les satdes d'évolution pour avoir un ordre plus logique dans le fichier Json, il doit également comprendre que les modèles pré-entraînés (sur le dataset Global Wheat) que nous fournissons sont liés au Json "mal ordonné". Pour pouvoir exécuter l'API, il conviendra alors de repartir sur des modèles vierges en initialisant l'argument continue_from_model à None dans la fonction switch de la fonction openWindowTraining dans le script API.py.</i>
+<i>Note : Si l'utilisateur souhaite renommer les stades d'évolution pour avoir un ordre plus logique dans le fichier Json, il doit également comprendre que les modèles pré-entraînés (sur le dataset Global Wheat) que nous fournissons sont liés au Json "mal ordonné". Pour pouvoir exécuter l'API, il conviendra alors de repartir sur des modèles vierges en initialisant l'argument continue_from_model à None dans la fonction switch de la fonction openWindowTraining dans le script API.py.</i>
 
 Nous expliquerons un peu plus tard comment différencier ces stades de croissance pour labelliser correctement.
 
@@ -90,7 +90,7 @@ Nous expliquerons un peu plus tard comment différencier ces stades de croissanc
 Ce dossier contient l'ensemble des images qui seront utiles à l'algorithme, les modèles et des fichiers ouvrables dans TensorBoard pour visualiser la performance du modèle. En particulier : 
 - le dossier "train" contient l'ensemble des données d'entraînement
 - le dossier "test" est vide au début puis servira de dossier de stockage des nouvelles images avant leur prédiction par le modèle
-- le dossier "models" est un dossier de stockage du nouveau modèle après ré-entraînement de l'ancien modèle sur les anciennes et les nouvelles images. Ce dossier est vide au début
+- le dossier "models" est un dossier de stockage du nouveau modèle après ré-entraînement de l'ancien modèle sur les anciennes et les nouvelles images du Farmbot. Ce dossier est vide au début
 - le dossier "models_archives" n'existe pas au début, il est créé lors du premier ré-entraînement de l'algorithme dans l'API. C'est un dossier de stockage des anciens modèles.
 - le dossier "logs" permet de stocker les dossiers logs de chaque occurence du ré-entraînement de l'algorithme. Dans ces dossiers logs, on retrouve notamment des fichiers V2 ouvrables sur TensorBoard.
 
