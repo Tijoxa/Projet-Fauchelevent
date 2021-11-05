@@ -49,7 +49,7 @@ On trouve d'abord la bibliothèque d'imports :
 
 Le path est le dossier courant dans lequel se situe l'ensemble du dossier ImageAI. Il doit donc se terminer par ".../ImageAI/". Pour faire tourner l'API chez soi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>, faute de quoi l'algorithme ne trouvera pas vos fichiers.
 
-On définit par la suite des variables globales que l'on pourra appeler n'importe où dans le script. Elles servent au dimensionnement de fenêtres, au choix des images, à la définition du type de modèle utilisé parmi mobilenetv2, resnet50, densenet121 ou efficientnetb7. 
+On définit par la suite des variables globales que l'on pourra appeler n'importe où dans le script. Elles servent au dimensionnement de fenêtres, au choix des images, à la définition du type de modèle utilisé parmi mobilenetv2, resnet50, densenet121, inceptionv3 ou efficientnetb7. 
 
 Vient ensuite une liste de fonctions utilisées pour la plupart lorsque l'on appuie sur des boutons dans l'API. Nous ne nous attarderons pas sur l'explication de ces fonctions qui sont chacune déjà commentées dans le script API.py. Il est cependant important de noter que le nombre d'epochs lorsque l'on ré-entraîne l'algorithme peut être changé à la main en <b>éditant la variable num_experiments dans la fonction openWindowTraining</b>.
 
@@ -57,7 +57,7 @@ Nous créons donc notre fenêtre principale que nous customisons avec des dimens
 
 ### Core
 
-Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion. Dans ce script aussi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>. Il est également important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121 ou efficientnetb7.
+Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion. Dans ce script aussi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>. Il est également important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121, inceptionv3 ou efficientnetb7.
 
 L'ensemble des fonctions utilisées dans core.py sont également commentées dans le script.
 
