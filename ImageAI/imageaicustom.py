@@ -359,7 +359,7 @@ class ClassificationModelTrainer:
         
         tensorboard = tf.keras.callbacks.TensorBoard(log_dir=logs_path, histogram_freq=0, write_graph=True, write_images=False)
         
-        earlystopping = tf.keras.callbacks.EarlyStopping(monitor="val_accuracy", min_delta=0.001, patience=10, verbose=0, mode="max", baseline=None, restore_best_weights=True)
+        earlystopping = tf.keras.callbacks.EarlyStopping(monitor="val_accuracy", min_delta=0.001, patience=50, verbose=0, mode="max", baseline=None, restore_best_weights=True)
         
         height_shift = 0
         width_shift = 0
@@ -405,16 +405,16 @@ class ClassificationModelTrainer:
         num_test = len(test_generator.filenames)
         print("Number of experiments (Epochs) : ", self.__num_epochs)
         
-        # model.fit or model.fit_generator is basically the same thing
+        # model.fit and model.fit_generator are basically the same thing
         model.fit(train_generator,
                             steps_per_epoch=int(num_train / batch_size),
                             epochs=self.__num_epochs,
                             validation_data=test_generator,
                             validation_steps=int(num_test / batch_size),
-                            callbacks=[checkpoint, lr_scheduler, tensorboard, earlystopping],
+                            callbacks=[checkpoint, lr_scheduler, tensorboard],
                             class_weight=class_weight_custom,
                             max_queue_size=1,
-                            verbose=1)  # max_queue_size can be changed if enough memory
+                            verbose=1)  # max_queue_size can be changed if enough memory, remove earlystopping (in callbacks) if unwanted
 
 class CustomImageClassification:
     """
