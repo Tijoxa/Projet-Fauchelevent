@@ -405,16 +405,21 @@ class ClassificationModelTrainer:
         num_test = len(test_generator.filenames)
         print("Number of experiments (Epochs) : ", self.__num_epochs)
         
-        # model.fit and model.fit_generator are basically the same thing
+        """
+        model.fit and model.fit_generator are basically the same thing
+        max_queue_size can be changed if enough memory
+        remove earlystopping (in callbacks) if unwanted
+        verbose=0 may enhance training speed
+        """
         model.fit(train_generator,
                             steps_per_epoch=int(num_train / batch_size),
                             epochs=self.__num_epochs,
                             validation_data=test_generator,
                             validation_steps=int(num_test / batch_size),
-                            callbacks=[checkpoint, lr_scheduler, tensorboard],
+                            callbacks=[checkpoint, lr_scheduler, tensorboard, earlystopping],
                             class_weight=class_weight_custom,
                             max_queue_size=1,
-                            verbose=1)  # max_queue_size can be changed if enough memory, remove earlystopping (in callbacks) if unwanted
+                            verbose=1)
 
 class CustomImageClassification:
     """
