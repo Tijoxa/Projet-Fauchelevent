@@ -120,3 +120,8 @@ customize num_experiments (optionnal)
 put labelled data into the train folder
 put the model (.h5) file into the ImageAI folder and change the model_type name in the core.py file according to the architecture of the .h5 file
 </pre>
+
+https://mega.nz/file/KMR0zZrb#i2IoAQzYbnAXlaHHPB7qnMqjilWWX99H9A-n2HtYbZ4                modèles préentraînés
+https://mega.nz/file/CEJTgQ4A#bfYrD2gzBqJyfbK9Byss981Bks2rBpZ6_lEEEt0a4HI
+
+downloads links supported until 2022/12/31 (YYYY/MM/DD)
