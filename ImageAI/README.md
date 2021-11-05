@@ -121,11 +121,11 @@ L'API s'ouvre sur une fenêtre avec les boutons "Choose files" et "Load Files". 
 
 Puis s'ouvrent une par une les fenêtres de labellisation. L'API renseigne la prédiction que fait le modèle (le fichier .h5 choisi et placé dans le dossier ImageAI) et autorise l'utilisateur à rectifier la prédiction si elle est fausse. Il peut pour cela utiliser le menu déroulant puis cliquer sur "Valid". Pour la labellisation, il convient de se renseigner sur la pousse d'orge. Pour l'équipe Fauchelevent, ces stades de croissance sont définies dans la slide 14 de la présentation PowerPoint présente sur le Drive.
 
-Une fois toutes les labellisations faites, les nouvelles images sont stockées dans le jeu d'entraînement et une nouvelle fenêtre s'affiche. Les :
-- Segmenter le jeu de données en un jeu d'entraînement et de validation (Crée donc un dossier Validation au même endroit que le dossier train)
-- Ré-entraîner le modèle (cela affiche à la fin la matrice de confusion)
-- Une fois l'entraînement complété, on remet les images ayant servies à la validation dans le dossier train
-- Puis on ferme le programme
+Une fois toutes les labellisations faites, les nouvelles images sont stockées dans le jeu d'entraînement et une nouvelle fenêtre s'affiche. Il faut alors, dans l'ordre (avec les boutons correspondants) :
+- Segmenter le jeu de données en un jeu d'entraînement et de validation - Créé donc un dossier Validation au même endroit que le dossier train ('Split into train/validation')
+- Ré-entraîner le modèle, cela affiche à la fin la matrice de confusion ('Train the model for x epochs')
+- Remettre les images ayant servies à la validation dans le dossier train ('Merge validation folder into the train folder')
+- Fermer le programme ('Exit')
 
 A la toute fin, on peut évaluer les performances de l'algorithme avec l'outil TensorBoard (outil de visualisation fournit par Tensorflow qu'utilise ImageAI). Pour ce faire, on ouvre un interface de commande. Ensuite, il faut se placer dans le dossier logs correspondant et ouvrir Tensorboard :
 <pre>
@@ -137,8 +137,9 @@ Cela renseigne l'URL localhost qu'il faut ouvrir sur Internet pour avoir le Tens
 ## Pour aller plus loin (Pour l'équipe Fauchelevent notamment)
 
 Pour aller plus loin, nous proposons de :
-- Utiliser la date de photographie (i.e. la date de pousse) comme paramètre d'entrée du modèle pour augmenter ses performances
+- Utiliser la date de photographie (i.e. la date de pousse) comme paramètre d'entrée du modèle pour augmenter ses performances (A rectifier - Slack)
 - Automatiser la prise de photos chez Sixmon
 - Incliner le plan de photo (30°) avec la pièce Onshape
 - Rendre l'API plus "user friendly"
 - Customiser la data augmentation (dans imageaicustom.py) avec plus d'attention
+- Utiliser ce bout de projet pour le but final du projet à savoir la corrélation entre le changement climatique et la vitesse de pousse de l'orge
