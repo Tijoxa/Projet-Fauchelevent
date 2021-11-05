@@ -109,6 +109,24 @@ pip install seaborn
 </pre>
 
 ## Utilisation de l'API
+
+Avant d'exécuter le script API.py, il convient de faire quelques manipulations. En particulier, il faut télécharger l'ensemble des modèles pré-entraînés sur Global Wheat à l'adresse https://mega.nz/file/KMR0zZrb#i2IoAQzYbnAXlaHHPB7qnMqjilWWX99H9A-n2HtYbZ4. Pour les plus curieux, on pourra également trouver les images du dataset Global Wheat Detection à l'adresse https://mega.nz/file/CEJTgQ4A#bfYrD2gzBqJyfbK9Byss981Bks2rBpZ6_lEEEt0a4HI. <i>Ces liens ne seront plus garantis à partir de 2022/12/31 (YYYY/MM/DD).</i>
+
+Parmi les 3 modèles .h5 que l'on peut trouver à la première adresse, il faut en choisir un et le placer dans le dossier ImageAI (i.e dans le même dossier que les fichiers python). Ces trois modèles ont été pré-entraînés sur le dataset Global Wheat Detection qui est très largement déséquilibré. Malgré nos tentatives de rééquilibrage, ces modèles ne performent pas au maximum de leurs capacités (entre 0.62 et 0.73 et val_accuracy). Nous laissons donc le choix à l'utilisateur de prendre nos modèles pré-entraînés sur Global wheat ou bien de partir des modèles vierges.
+
+<b>On peut enfin lancer le script Python !</b>
+
+L'API s'ouvre sur une fenêtre avec les boutons "Choose files" et "Load Files". Le bouton Choose Files permet de parcourir l'explorateur de fichiers pour choisir les nouvelles images du robot Farmbot. Les formats PNG et JPG sont supportés pour les images. Une fois toutes les images choisies, on appuie sur "Load Files" qui va les transférer dans le dossier dataset > test.
+
+Puis s'ouvrent une par une les fenêtres de labellisation. L'API renseigne la prédiction que fait le modèle (le fichier .h5 choisi et placé dans le dossier ImageAI) et autorise l'utilisateur à rectifier la prédiction si elle est fausse. Il peut pour cela utiliser le menu déroulant puis cliquer sur "Valid". Pour la labellisation, il convient de se renseigner sur la pousse d'orge. Pour l'équipe Fauchelevent, ces stades de croissance sont définies dans la slide 14 de la présentation PowerPoint présentes sur le Drive.
+
+Une fois toutes les labellisations faites, les nouvelles images sont stockées dans le jeu d'entraînement et une nouvelle fenêtre s'affiche. Les :
+- Segmenter le jeu de données en un jeu d'entraînement et de validation (Crée donc un dossier Validation au même endroit que le dossier train)
+- Ré-entraîner le modèle (cela affiche à la fin la matrice de confusion)
+- Une fois l'entraînement complété, on remet les images ayant servies à la validation dans le dossier train
+- Puis on ferme le programme
+
+
 ## Pour aller plus loin
 
 
@@ -121,7 +139,5 @@ put labelled data into the train folder
 put the model (.h5) file into the ImageAI folder and change the model_type name in the core.py file according to the architecture of the .h5 file
 </pre>
 
-https://mega.nz/file/KMR0zZrb#i2IoAQzYbnAXlaHHPB7qnMqjilWWX99H9A-n2HtYbZ4                modèles préentraînés
-https://mega.nz/file/CEJTgQ4A#bfYrD2gzBqJyfbK9Byss981Bks2rBpZ6_lEEEt0a4HI
 
 downloads links supported until 2022/12/31 (YYYY/MM/DD)
