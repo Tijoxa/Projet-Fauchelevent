@@ -75,7 +75,13 @@ Ce fichier Json renseigne le nom des stades d'évolution de l'orge que nous voul
 - Stade 3 = "Epi"
 - Stade 4 = "Moisson"
 
-Dans le fichier Json, les stades d'évolution ne sont pas classés comme ci-dessous car il les classe par ordre alphanumérique.
+Dans le fichier Json, les stades d'évolution ne sont pas classés comme ci-dessous car celui-ci les classent par ordre alphanumérique :
+- 1 : Epi
+- 2 : Levee
+- 3 : Moisson
+- 4 : Tallage
+
+<i>Note : Si l'utilisateur souhaite renommer les satdes d'évolution pour avoir un ordre plus logique dans le fichier Json, il doit également comprendre que les modèles pré-entraînés (sur le dataset Global Wheat) que nous fournissons sont liés au Json "mal ordonné". Pour pouvoir exécuter l'API, il conviendra alors de repartir sur des modèles vierges en initialisant l'argument continue_from_model à None dans la fonction switch de la fonction openWindowTraining dans le script API.py.</i>
 
 Nous expliquerons un peu plus tard comment différencier ces stades de croissance pour labelliser correctement.
 
