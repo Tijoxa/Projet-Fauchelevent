@@ -51,13 +51,13 @@ Le path est le dossier courant dans lequel se situe l'ensemble du dossier ImageA
 
 On définit par la suite des variables globales que l'on pourra appeler n'importe où dans le script. Elles servent au dimensionnement de fenêtres, au choix des images, à la définition du type de modèle utilisé parmi mobilenetv2, resnet50, densenet121 ou efficientnetb7. 
 
-Vient ensuite une liste de fonctions utilisées pour la plupart lorsque l'on appuie sur des boutons dans l'API. Nous ne nous attarderons pas sur l'explication de ces fonctions qui sont chacune déjà commentées dans le script API.py.
+Vient ensuite une liste de fonctions utilisées pour la plupart lorsque l'on appuie sur des boutons dans l'API. Nous ne nous attarderons pas sur l'explication de ces fonctions qui sont chacune déjà commentées dans le script API.py. Il est cependant important de noter que le nombre d'epochs lorsque l'on ré-entraîne l'algorithme peut être changé à la main en <b>éditant la variable num_experiments dans la fonction openWindowTraining</b>.
 
 Nous créons donc notre fenêtre principale que nous customisons avec des dimensions, un logo (logo.ico) et un titre. Puis, nous créons un cadre pour placer correctement des boutons et du texte. Le root.mainloop() est simplement une méthode dans la fenêtre principale qui exécute ce que nous souhaitons exécuter dans une application (permet à Tkinter de commencer à exécuter l'application). Comme son nom l'indique, elle bouclera indéfiniment jusqu'à ce que l'utilisateur quitte la fenêtre ou attende tout événement de la part de l'utilisateur.
 
 ### Core
 
-Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion. Il est important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121 ou efficientnetb7.
+Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion. Dans ce script aussi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>. Il est également important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121 ou efficientnetb7.
 
 L'ensemble des fonctions utilisées dans core.py sont également commentées dans le script.
 
@@ -75,9 +75,11 @@ Ce fichier Json renseigne le nom des stades d'évolution de l'orge que nous voul
 - Stade 3 = "Epi"
 - Stade 4 = "Moisson"
 
+Dans le fichier Json, les stades d'évolution ne sont pas classés comme ci-dessous car il les classe par ordre alphanumérique.
+
 Nous expliquerons un peu plus tard comment différencier ces stades de croissance pour labelliser correctement.
 
-### dataset
+### Dataset
 
 Ce dossier contient l'ensemble des images qui seront utiles à l'algorithme, les modèles et des fichiers ouvrables dans TensorBoard pour visualiser la performance du modèle. En particulier : 
 - le dossier "train" contient l'ensemble des données d'entraînement
@@ -104,19 +106,6 @@ pip install seaborn
 ## Pour aller plus loin
 
 
-
-
-
-Requirements:
-<pre>
-Python 3.7.6 (with tkinter Tcl/Tk)
-pip
-pip install tensorflow==2.4.0
-pip install tensorflow-gpu==2.4.0
-pip install keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.4.1 h5py==2.10.0 matplotlib==3.3.2 opencv-python keras-resnet==0.2.0
-pip install keyboard
-pip install seaborn
-</pre>
 
 Before starting the API.py script:
 <pre>
