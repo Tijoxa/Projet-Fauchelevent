@@ -29,8 +29,8 @@ Le structure du dossier Image AI est la suivante :
   imageaicustom.py
   logo.ico
   model_class.json
-README.md
-requirements.txt
+  README.md
+  requirements.txt
 </pre>
 
 ### API
