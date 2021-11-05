@@ -75,7 +75,7 @@ Ce fichier Json renseigne le nom des stades d'évolution de l'orge que nous voul
 - Stade 3 = "Epi"
 - Stade 4 = "Moisson"
 
-Dans le fichier Json, les stades d'évolution ne sont pas classés comme ci-dessous car celui-ci les classent par ordre alphanumérique :
+Dans le fichier Json, les stades d'évolution ne sont pas classés comme ci-dessus car celui-ci les classent par ordre alphanumérique :
 - 1 : Epi
 - 2 : Levee
 - 3 : Moisson
