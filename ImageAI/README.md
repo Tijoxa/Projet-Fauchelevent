@@ -57,7 +57,7 @@ Nous créons donc notre fenêtre principale que nous customisons avec des dimens
 
 ### Core
 
-Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion. Dans ce script aussi, <b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS API.PY</b>. Il est également important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121, inceptionv3 ou efficientnetb7.
+Le script core.py est appelé par le script API.py. Dans core.py, on retrouve notamment des fonctions relatives à l'entraînement du modèle, à la prédiction sur de nouvelles images et à l'affichage de la matrice de confusion.<b> IL FAUT CHANGER A LA MAIN LE NOM DU PATH DANS CORE.PY</b>. Il est également important de savoir que <b>pour changer le type de modèle utilisé, il faut éditer à la main la variable model_type</b>. L'ensemble des modèles disponibles supportés facilement par ImageAI sont mobilenetv2, resnet50, densenet121, inceptionv3 ou efficientnetb7.
 
 L'ensemble des fonctions utilisées dans core.py sont également commentées dans le script.
 
