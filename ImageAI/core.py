@@ -1,6 +1,6 @@
 import os
 
-# Current path for the API needs to be updated if the script is run on another device
+'''Current path for the API needs to be updated if the script is run on another device'''
 path = "C:/Users/DL/Documents/Projet-Fauchelevent-Purjack-patch-1/ImageAI/"
 os.chdir(path)
 
@@ -11,7 +11,11 @@ import json
 import shutil
 import time
 
-model_type = "resnet50"  # mobilenetv2 / densenet121 / resnet50 / efficientnetb7
+"""
+Those classification architecture are supported:
+mobilenetv2 / densenet121 / resnet50 / inceptionv3 / efficientnetb7
+"""
+model_type = "resnet50"
 
 def getModelType():
     return model_type
@@ -25,7 +29,7 @@ def readJson():
         json_file.close()
     return dirdict
 
-## class_weigth_custom
+## Customize weights of classes for unbalanced dataset
 def normalizeClassWeights(train_subdirectory):
 
     dirdict = readJson()
@@ -58,18 +62,19 @@ def trainModelFunction(model_type, dataset_directory = path + "dataset", json_su
         model_trainer.setModelTypeAsDenseNet121()
     elif (model_type == "resnet50"):
         model_trainer.setModelTypeAsResNet50()
+    elif (model_type == "inceptionv3"):
+        model_trainer.setModelTypeAsInceptionV3()
     elif (model_type == "efficientnetb7"):
         model_trainer.setModelTypeAsEfficientNetB7()
 
     model_trainer.setDataDirectory(dataset_directory, json_subdirectory=json_subdirectory, test_subdirectory = path + "dataset/validation", train_subdirectory = path + "dataset/train")
 
-    # batch_size = 1 for heavier models (resnet50, dense121)
+    '''Put batch_size = 1 for heavier models (resnet50, dense121) that raise Out of memory issues'''
     model_trainer.trainModel(num_objects=len(dirdict), num_experiments=num_experiments, enhance_data=True, batch_size=1, training_image_size=1024, class_weight_custom=class_weight_custom, continue_from_model=continue_from_model)
 
 
 ## Test
 from imageaicustom import CustomImageClassification
-
 
 def testModelFunction(model_type, folder_path, model_path):
     dirdict = readJson()
@@ -81,6 +86,8 @@ def testModelFunction(model_type, folder_path, model_path):
         prediction.setModelTypeAsDenseNet121()
     elif (model_type == "resnet50"):
         prediction.setModelTypeAsResNet50()
+    elif (model_type == "inceptionv3"):
+        model_trainer.setModelTypeAsInceptionV3()
     elif (model_type == "efficientnetb7"):
         prediction.setModelTypeAsEfficientNetB7()
 
@@ -94,18 +101,15 @@ def testModelFunction(model_type, folder_path, model_path):
         preds[file]=prediction.classifyImage(file_path, result_count=1)
     return preds
 
-# print(testModelFunction("mobilenetv2"))
-
-
 ## Confusion matrix
 from tensorflow.math import confusion_matrix
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-# model_file = path + 'model - epoch 100 - val_acc 0.636637.h5'  # put the path to the model that will be tested on the validation data
-
-def confusionMatrix(model_file):  # returns nothing, but shows the diagram
+def confusionMatrix(model_file):
+    '''returns nothing, but shows the diagram'''
+    
     dirdict = readJson()
 
     y_true = []
