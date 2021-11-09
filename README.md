@@ -1,6 +1,8 @@
 # Projet-Fauchelevent
 
-<img src="https://le-cdn.website-editor.net/22136137722b4fd9bef4eaa9defe6148/dms3rep/multi/opt/logo_farmbot_fauchelevent-596w.png">
+<p align="center">
+       <img src="https://le-cdn.website-editor.net/22136137722b4fd9bef4eaa9defe6148/dms3rep/multi/opt/logo_farmbot_fauchelevent-596w.png">
+</p>
 
 Le projet Fauchelevent est un projet écologique mis en place par l'entreprise Metigate. L'objectif de ce projet est de déterminer l'impact du climat sur la production agricole via une collecte de données agronomiques. Pour y parvenir, Metigate nous a demandé de concevoir un algorithme permettant de déterminer 4 stades de croissance de l'orge à partir de photos prises par un robot potager Farmbot.
 
