@@ -1,6 +1,6 @@
 # ImageAI
 ## Avertissement
-L'ensemble du README se veut le plus exhaustif possible. Nous avons écrit ce README de telle sorte que n'importe qu'elle personne puisse comprendre notre cheminement, les scripts python et comment modifier les scripts à sa guise pour faire tourner l'API chez soi. <b>Il est donc très important de tous lire !</b>
+L'ensemble du README se veut le plus exhaustif possible. Nous avons écrit ce README de telle sorte que n'importe qu'elle personne puisse comprendre notre cheminement, les scripts python et comment modifier les scripts à sa guise pour faire tourner l'API chez soi. <b>Il est donc très important de tout lire !</b>
 ## Introduction
 ImageAI est une bibliothèque Python de Computer Vision facile à utiliser qui permet aux développeurs d'intégrer facilement des fonctions d'intelligence artificielle de pointe dans leurs applications et systèmes nouveaux et existants. Elle est utilisée par des milliers de développeurs, étudiants, chercheurs, tuteurs et experts dans des entreprises du monde entier. 
 
