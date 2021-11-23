@@ -11,6 +11,9 @@ Le projet Fauchelevent est un projet écologique mis en place par l'entreprise M
 Ce dépôt GitHub recense à la fois le livrable final (ImageAI) mais aussi les pistes explorées puis abandonnées (TFOD37 et PyTorch38). Nous avons dédié une partie explicative dans ce README pour chaque dossier présent à la racine du projet. Nous y avons explicité les intallations nécessaires, le fonctionnement de l'algorithme et les erreurs rencontrées. Nous avons aussi tenu à expliquer pourquoi nous avons abandonné les pistes TFOD et PyTorch pour une meilleure compréhension de notre démarche au cours des 7 semaines qui ont rythmé ce projet.
 
 ## ImageAI
+
+Voir README.md dans le dossier ImageAI
+
 ## TFOD37
 
 L'algorithme utilisant TFOD37 s'inspire très largement des travaux de Nicholas Renotte, que l'on peut retrouver à l'adresse : https://github.com/nicknochnack/TFODCourse. Il existe également une vidéo explicative (environ 5h) : https://youtu.be/yqkISICHH-U?list=RDCMUCHXa4OpASJEwrHrLeIzw7Yg.
